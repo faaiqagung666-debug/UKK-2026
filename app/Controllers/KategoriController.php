@@ -51,9 +51,9 @@ class KategoriController extends Controller
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    public function destroy($id)
+    public function destroy($id_kategori)
     {
-        $kategori = Kategori::find($id);
+        $kategori = Kategori::find($id_kategori);
         $kategori->delete();
 
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus.');
