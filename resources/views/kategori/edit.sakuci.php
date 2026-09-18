@@ -1,6 +1,6 @@
-@extends('layouts.app')
+t@extends('layouts.app')
 
-@section('content')
+@secion('content')
 
 <h1>edit kategori</h1>
 <form action="{{ route('kategori.update', ['id_kategori' => $data->id_kategori]) }}" method="POST" class="d-flex flex-column gap-2">

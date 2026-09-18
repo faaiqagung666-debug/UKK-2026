@@ -6,16 +6,16 @@
 
     {{-- Hero --}}
     <section class="text-center py-4 py-lg-5">
-        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">Sakuci v1.0.0</span>
+        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">WELCOME</span>
 
         <h1 class="display-5 fw-bold mb-3">
-            Kerangka PHP rasa Laravel,<br class="d-none d-md-inline">
-            <span class="text-brand">tanpa Composer</span>
+            Peminjaman alat ,<br class="d-none d-md-inline">
+            <span class="text-brand">SMK SANGKURIANG 1</span>
         </h1>
 
         <p class="lead text-secondary mx-auto mb-4" style="max-width: 620px;">
-            Route, Model, View, dan Controller dalam satu paket ringan.
-            Cukup PHP OOP murni -- salin foldernya, jalankan, selesai.
+           Alat merupakan salah satu fasilitas yang dibutuhkan dalam kegiatan belajar mengajar,
+           berikut web untuk mempermudah peminjaman alat/barang sekolah
         </p>
 
         <div class="d-flex flex-wrap gap-2 justify-content-center">
@@ -24,8 +24,8 @@
         </div>
 
         <p class="text-secondary small mt-3 mb-0">
-            Panduan langkah demi langkah ada di berkas
-            <code class="inline">TUTORIAL.md</code>
+            Web peminjaman alat sederhana
+            <code class="inline">FAAIQ AGUNG NUGRAHA</code>
         </p>
     </section>
 @endsection

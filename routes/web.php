@@ -84,12 +84,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 */
 // @generated-roles:start
 
-// @role:siswa:start
-Route::group(['prefix' => 'siswa', 'middleware' => 'siswa'], function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('siswa.dashboard');
-
+// @role:peminjam:start
+Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('peminjam.dashboard');
 });
-// @role:siswa:end
+// @role:peminjam:end
+// @role:petugas:start
+Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('petugas.dashboard');
+});
+// @role:petugas:end
 // @generated-roles:end
 
 /*
