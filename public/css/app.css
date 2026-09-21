@@ -1,11 +1,11 @@
-﻿/*
+/*
 | Lapisan tema di atas Bootstrap.
 | Bootstrap dimuat lebih dulu, file ini hanya menimpa seperlunya.
 */
 
 :root {
-    --brand: #c2410c;
-    --brand-dark: #9a3412;
+    --brand: #0b0ee0;
+    --brand-dark: #0b0ee0;
     --brand-subtle: #fff7ed;
 }
 
@@ -183,7 +183,7 @@ code.inline {
 .demo-box {
     padding: .6rem .5rem;
     background: var(--brand-subtle);
-    border: 1px solid #fdba8c;
+    border: 1px solid #6d56d8;
     border-radius: 6px;
     color: var(--brand-dark);
     font-size: .8rem;
@@ -241,13 +241,13 @@ code.inline {
 [data-bs-theme="dark"] .bg-brand-subtle,
 [data-bs-theme="dark"] .step-number {
     background-color: rgba(194, 65, 12, .18) !important;
-    color: #fb923c;
+    color: #0b0ee0;
 }
 
 [data-bs-theme="dark"] .demo-box {
     background-color: rgba(194, 65, 12, .18);
     border-color: rgba(194, 65, 12, .4);
-    color: #fb923c;
+    color: #0b0ee0;
 }
 
 [data-bs-theme="dark"] .demo-box-alt {
