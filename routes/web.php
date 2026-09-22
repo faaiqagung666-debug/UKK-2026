@@ -70,7 +70,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('/alat/store', [alatController::class, 'store'])->name('alat.store');
     Route::get('/alat/{id_alat}/edit', [alatController::class, 'edit'] )->name('alat.edit');
     Route::put('/alat/{id_alat}', [alatController::class, 'update'] )->name('alat.update');
-    Route::delete('/alat/{id_alat}', [alatController::class, 'destroy'] )->name('alat.destroy');
+    Route::delete('/alat/{id_alat}', [alatController::class, 'delete'] )->name('alat.delete');
 
     });
 

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-body border-bottom sticky-top navbar-brand-theme">
     <div class="container">
         <div class="d-flex align-items-center gap-2">
             @php
@@ -18,7 +18,7 @@
                     <circle cx="16" cy="16" r="9" fill="{{ $dbConnected ? '#28a745' : '#dc3545' }}"/>
                 </svg>
             </button>
-            <a class="navbar-brand fw-semibold m-0" href="{{ route('home') }}">{{ config('app.name') }}</a>
+            <a class="navbar-brand fw-semibold m-0 text-brand-logo" href="{{ route('home') }}">{{ config('app.name') }}</a>
         </div>
 
         <button class="navbar-toggler border-0" type="button"
@@ -80,3 +80,81 @@
         </div>
     </div>
 </nav>
+
+<style>
+    :root {
+        --brand-1: #4f8dff;
+        --brand-2: #7c5cff;
+    }
+
+    .navbar-brand-theme {
+        backdrop-filter: blur(6px);
+    }
+
+    .text-brand-logo {
+        font-size: 1.1rem;
+    }
+
+    .logo-toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        line-height: 0;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: transform .18s ease;
+    }
+    .logo-toggle:hover {
+        transform: scale(1.06);
+    }
+    .logo-toggle .logo-ring {
+        fill: none;
+        stroke: rgba(127,127,127,0.25);
+        stroke-width: 1.5;
+    }
+
+    .navbar-brand-theme .nav-link {
+        font-weight: 500;
+        position: relative;
+        color: inherit;
+        opacity: .75;
+        transition: opacity .15s ease, color .15s ease;
+    }
+    .navbar-brand-theme .nav-link:hover {
+        opacity: 1;
+    }
+    .navbar-brand-theme .nav-link.active {
+        opacity: 1;
+        color: var(--brand-1) !important;
+        font-weight: 700;
+    }
+    .navbar-brand-theme .nav-link.active::after {
+        content: "";
+        position: absolute;
+        left: .25rem;
+        right: .25rem;
+        bottom: -4px;
+        height: 3px;
+        border-radius: 3px;
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    }
+
+    .btn-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(79,141,255,0.35);
+        transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-brand:hover,
+    .btn-brand:focus {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(79,141,255,0.45);
+        filter: brightness(1.05);
+    }
+    .btn-brand:active {
+        transform: translateY(0);
+    }
+</style>
