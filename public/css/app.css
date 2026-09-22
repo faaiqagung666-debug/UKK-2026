@@ -4,8 +4,8 @@
 */
 
 :root {
-    --brand: #0b0ee0;
-    --brand-dark: #0b0ee0;
+    --brand: #5d5fdf;
+    --brand-dark: #5d5fdf;
     --brand-subtle: #fff7ed;
 }
 
@@ -241,13 +241,13 @@ code.inline {
 [data-bs-theme="dark"] .bg-brand-subtle,
 [data-bs-theme="dark"] .step-number {
     background-color: rgba(194, 65, 12, .18) !important;
-    color: #0b0ee0;
+    color: #5d5fdf;
 }
 
 [data-bs-theme="dark"] .demo-box {
     background-color: rgba(194, 65, 12, .18);
     border-color: rgba(194, 65, 12, .4);
-    color: #0b0ee0;
+    color: #5d5fdf;
 }
 
 [data-bs-theme="dark"] .demo-box-alt {

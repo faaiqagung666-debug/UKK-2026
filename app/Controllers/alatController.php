@@ -4,7 +4,8 @@ namespace App\Controllers;
 
 use Sakuci\Controller;
 use Sakuci\Http\Request;
-use App\Models\alat; // Model alat sudah di-import di sini
+use App\Models\alat;
+use App\Models\Kategori;
 
 class alatController extends Controller
 {
@@ -16,7 +17,8 @@ class alatController extends Controller
 
     public function create(Request $request)
     {
-        return view('alat.create');
+         $daftarKategori = Kategori::all();
+        return view('alat.create', compact('daftarKategori'));
     }
 
     public function store(Request $request)
@@ -25,6 +27,7 @@ class alatController extends Controller
         $validatedData = $request->validate([
             'nama_alat' => 'required|min:3|max:100',
             'kode_alat' => 'required|string|min:3|max:100', 
+            'id_kategori' => 'required|string|min:3|max:100', 
         ]);
 
         // 2. Ubah Kategori menjadi alat agar sesuai dengan data yang sedang diproses
@@ -38,8 +41,8 @@ class alatController extends Controller
         // 3. Ubah Kategori menjadi alat
         $alat = alat::findOrFail($id_alat);
 
-        // 4. Ubah 'data' menjadi 'alat' agar sesuai dengan nama variabel di atas
-        return view('alat.edit', compact('alat'));
+        $daftarKategori = Kategori::all();
+        return view('alat.edit', compact('alat', 'daftarKategori'));
     }
 
     public function update(Request $request, $id_alat)

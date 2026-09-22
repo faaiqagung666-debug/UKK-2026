@@ -11,6 +11,7 @@
             <th >no</th>
             <th >Kode alat</th>
             <th >Nama alat</th>
+            <th >Kategori</th>
             <th >Aksi</th>
         </tr>
     </thead>
@@ -21,6 +22,7 @@
                 <td>{{ $no++}}</td>
                 <td>{{ $item->kode_alat }}</td>
                 <td>{{ $item->nama_alat }}</td>
+                 <td>{{ $item->Kategori }}</td>
                 <td>
                     <a href="{{ route('alat.edit', ['id_alat' => $item->id_alat]) }}" class="btn btn-sm btn-primary">Edit</a>
                     
