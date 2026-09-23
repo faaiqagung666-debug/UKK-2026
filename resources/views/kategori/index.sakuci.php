@@ -9,9 +9,9 @@
             --brand-1: #4f8dff;
             --brand-2: #7c5cff;
             --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(79,141,255,0.10), transparent 45%),
-                              radial-gradient(circle at 80% 30%, rgba(124,92,255,0.10), transparent 45%);
+                            radial-gradient(circle at 80% 30%, rgba(124,92,255,0.10), transparent 45%);
             --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(79,141,255,0.18), transparent 45%),
-                             radial-gradient(circle at 80% 30%, rgba(124,92,255,0.18), transparent 45%);
+                           radial-gradient(circle at 80% 30%, rgba(124,92,255,0.18), transparent 45%);
         }
 
         .hero-wrap {
@@ -21,6 +21,7 @@
             padding: 2rem 1.5rem;
             background: var(--hero-bg-light);
             margin-bottom: 1.5rem;
+            transition: background 0.3s ease;
         }
 
         .badge-brand {
@@ -66,11 +67,17 @@
         }
 
         .card-brand {
-            border: none;
+            border: 1px solid rgba(127,127,127,0.12);
             border-radius: 1.2rem;
             box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            background: #ffffff;
+            color: inherit;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
+        .table-brand {
+            color: inherit;
+        }
         .table-brand thead {
             background: rgba(79,141,255,0.08);
         }
@@ -95,25 +102,32 @@
             border-radius: .5rem;
             font-size: .8rem;
             border: 1px solid rgba(127,127,127,0.18);
+            color: inherit;
         }
 
+        /* Support Dark Mode Otomatis (Sistem & Bootstrap 5.3) */
         @media (prefers-color-scheme: dark) {
             .hero-wrap { background: var(--hero-bg-dark); }
-            .card-brand { background: #1f1f23; }
+            .card-brand { 
+                background: #1f1f23 !important; 
+                border-color: rgba(255, 255, 255, 0.08) !important;
+            }
             .table-brand thead { background: rgba(79,141,255,0.12); }
-            .table-brand thead th { color: #d0d0d0; }
+            .table-brand thead th { color: #d0d0d0 !important; }
         }
+
         [data-bs-theme="dark"] .hero-wrap {
             background: var(--hero-bg-dark);
         }
         [data-bs-theme="dark"] .card-brand {
-            background: #1f1f23;
+            background: #1f1f23 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
         }
         [data-bs-theme="dark"] .table-brand thead {
             background: rgba(79,141,255,0.12);
         }
         [data-bs-theme="dark"] .table-brand thead th {
-            color: #d0d0d0;
+            color: #d0d0d0 !important;
         }
     </style>
 
@@ -121,7 +135,7 @@
     <section class="text-center py-3 py-lg-4 hero-wrap">
         <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">Manajemen Kategori</span>
 
-        <h1 class="display-6 fw-bold mb-2">
+        <h1 class="display-6 fw-bold mb-2 text-body">
             Daftar <span class="text-brand">Kategori</span>
         </h1>
 
@@ -149,10 +163,10 @@
                     @php $no = 1; @endphp
                     @foreach ($kategori as $item)
                         <tr>
-                            <td>{{ $no++ }}</td>
+                            <td class="text-body">{{ $no++ }}</td>
                             <td><code class="inline">{{ $item->kode_kategori }}</code></td>
-                            <td class="fw-semibold">{{ $item->nama_kategori }}</td>
-                            <td>{{ $item->keterangan }}</td>
+                            <td class="fw-semibold text-body">{{ $item->nama_kategori }}</td>
+                            <td class="text-secondary">{{ $item->keterangan }}</td>
                             <td class="text-end">
                                 <a href="{{ route('kategori.edit', ['id_kategori' => $item->id_kategori]) }}" class="btn btn-info btn-sm">Edit</a>
                                 <form action="{{ route('kategori.destroy', ['id_kategori' => $item->id_kategori]) }}"
