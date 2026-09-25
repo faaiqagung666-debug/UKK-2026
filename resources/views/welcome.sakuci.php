@@ -110,76 +110,7 @@
             </div>
         </div>
 
-        <!-- BARIS STATISTIK RINGKAS -->
-        <div class="row g-4 mb-4">
-            
-            <!-- Statistik 1 -->
-            <div class="col-md-4">
-                <div class="card border-0 bg-body-tertiary shadow-sm rounded-4 p-4 h-100 hover-lift d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="text-secondary small fw-bold text-uppercase tracking-wider">Ketersediaan Perangkat</span>
-                            <div class="icon-box bg-success-subtle text-success">
-                                <i class="bi bi-display fs-5"></i>
-                            </div>
-                        </div>
-                        <h2 class="fw-bold text-body mb-1">142 Unit</h2>
-                        <p class="text-secondary small mb-3">Proyektor, laptop, dan unit alat praktikum siap pakai.</p>
-                    </div>
-                    <div>
-                        <div class="d-flex justify-content-between small text-secondary mb-1">
-                            <span>Status Siap Pinjam</span>
-                            <span class="fw-bold text-success">85%</span>
-                        </div>
-                        <div class="progress" style="height: 8px; border-radius: 10px;">
-                            <div class="progress-bar bg-success rounded-pill" style="width: 85%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Statistik 2 -->
-            <div class="col-md-4">
-                <div class="card border-0 bg-body-tertiary shadow-sm rounded-4 p-4 h-100 hover-lift d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="text-secondary small fw-bold text-uppercase tracking-wider">Sedang Dipinjam</span>
-                            <div class="icon-box bg-primary-subtle text-primary">
-                                <i class="bi bi-person-workspace fs-5"></i>
-                            </div>
-                        </div>
-                        <h2 class="fw-bold text-body mb-1">18 Transaksi</h2>
-                        <p class="text-secondary small mb-0">Digunakan dalam KBM dan kegiatan ekstrakurikuler.</p>
-                    </div>
-                    <div class="mt-3 pt-3 border-top d-flex align-items-center text-secondary small">
-                        <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                        <span>Persetujuan otomatis oleh Petugas</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Statistik 3 -->
-            <div class="col-md-4">
-                <div class="card border-0 bg-body-tertiary shadow-sm rounded-4 p-4 h-100 hover-lift d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="text-secondary small fw-bold text-uppercase tracking-wider">Pengembalian Hari Ini</span>
-                            <div class="icon-box bg-warning-subtle text-warning">
-                                <i class="bi bi-clock-history fs-5"></i>
-                            </div>
-                        </div>
-                        <h2 class="fw-bold text-body mb-1">Sebelum 15.30</h2>
-                        <p class="text-secondary small mb-0">Batas akhir pengembalian alat ke ruang Sarpras.</p>
-                    </div>
-                    <div class="mt-3 pt-3 border-top d-flex align-items-center text-secondary small">
-                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                        <span>Harap tepat waktu untuk menghindari sanksi</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
+       
         <!-- BARIS KATEGORI CEPAT ALAT SEKOLAH -->
         <div class="row g-3">
             <div class="col-12 mb-2">
@@ -201,7 +132,7 @@
             <div class="col-6 col-md-3">
                 <a href="#" class="card border-0 bg-body-tertiary p-3 rounded-4 text-decoration-none text-body hover-lift d-flex flex-row align-items-center gap-3">
                     <div class="icon-box bg-info-subtle text-info rounded-3">
-                        <i class="bi bi-beaker fs-4"></i>
+                    <i class="bi bi-trash3-fill fs-4"></i>
                     </div>
                     <div>
                         <h6 class="mb-0 fw-bold">Alat kebersihan</h6>
