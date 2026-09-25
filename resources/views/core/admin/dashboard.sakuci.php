@@ -1,195 +1,271 @@
 @extends('layouts.app')
 
-@section('title', 'Admin')
+@section('title', config('app.name') . ' -- Panel Administrator')
 
 @section('content')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <style>
-        :root {
-            --brand-1: #4f8dff;
-            --brand-2: #7c5cff;
-        }
+<style>
+    :root {
+        --brand-1: #2563eb;
+        --brand-2: #7c3aed;
+        --brand-glow: rgba(37, 99, 235, 0.2);
+        --admin-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
+                           radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
+        --admin-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
+                          radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+    }
 
-        .badge-brand {
-            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-            color: #fff !important;
-            font-weight: 600;
-            letter-spacing: .03em;
-            box-shadow: 0 4px 18px rgba(79,141,255,0.35);
-            display: inline-flex;
-            align-items: center;
-            gap: .4rem;
-        }
-        .badge-brand::before {
-            content: "🛡️";
-            font-size: .9rem;
-        }
+    .badge-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        color: #fff !important;
+        font-weight: 600;
+        letter-spacing: .03em;
+        box-shadow: 0 4px 18px var(--brand-glow);
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        border-radius: 2rem;
+        padding: 0.45rem 1rem;
+    }
 
-        code.inline {
-            background: rgba(127,127,127,0.12);
-            padding: .2rem .55rem;
-            border-radius: .5rem;
-            font-size: .8rem;
-            border: 1px solid rgba(127,127,127,0.18);
-        }
+    code.inline {
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--brand-1);
+        padding: .25rem .6rem;
+        border-radius: .5rem;
+        font-size: .8rem;
+        font-weight: 600;
+        border: 1px solid rgba(37, 99, 235, 0.18);
+    }
 
-        .card-brand {
-            border: none;
-            border-radius: 1.2rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-        }
+    .card-brand {
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        border-radius: 1.5rem;
+        background: var(--admin-bg-light);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
 
-        .menu-card {
-            border: none;
-            border-radius: 1.2rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-            transition: transform .18s ease, box-shadow .18s ease;
-            color: inherit;
-        }
-        .menu-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 26px rgba(79,141,255,0.18);
-        }
-        .menu-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: .8rem;
-            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            margin-bottom: .75rem;
-        }
+    .menu-card {
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        border-radius: 1.25rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
+        transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+        color: inherit;
+        background: var(--bs-body-bg);
+        position: relative;
+        overflow: hidden;
+    }
 
-        /* Styling Tombol Titik Tiga yang Jelas */
-        .btn-menu-toggle {
-            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-            border: none;
-            border-radius: 0.9rem;
-            width: 48px;
-            height: 44px;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(79,141,255,0.4);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-menu-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79,141,255,0.6);
-            color: #ffffff;
-        }
+    .menu-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
 
-        /* Styling Sidebar Minimalis */
-        .sidebar-nav .nav-link {
-            color: #6c757d;
-            border-radius: 0.8rem;
-            padding: 0.7rem 1rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        .sidebar-nav .nav-link:hover,
-        .sidebar-nav .nav-link.active {
-            background: linear-gradient(135deg, rgba(79,141,255,0.12), rgba(124,92,255,0.12));
-            color: var(--brand-1) !important;
-        }
+    .menu-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
 
-        @media (prefers-color-scheme: dark) {
-            .card-brand, .menu-card, .offcanvas { background: #1f1f23; color: #fff; }
-        }
-        [data-bs-theme="dark"] .card-brand,
-        [data-bs-theme="dark"] .menu-card,
-        [data-bs-theme="dark"] .offcanvas {
-            background: #1f1f23;
-            color: #fff;
-        }
-    </style>
+    .menu-card:hover::after {
+        opacity: 1;
+    }
 
-    <div class="container py-4">
-        
-        {{-- TOMBOL TITIK TIGA (Kini Lebih Jelas dengan Warna Brand & Bayangan) --}}
-        <div class="mb-4">
+    .menu-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Styling Tombol Titik Tiga (Sidebar Toggler) */
+    .btn-menu-toggle {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        border: none;
+        border-radius: 0.85rem;
+        width: 44px;
+        height: 44px;
+        color: #ffffff;
+        box-shadow: 0 4px 15px var(--brand-glow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-menu-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        color: #ffffff;
+    }
+
+    /* Sidebar Navigasi */
+    .sidebar-nav .nav-link {
+        color: var(--bs-body-color);
+        border-radius: 0.75rem;
+        padding: 0.7rem 1rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    .sidebar-nav .nav-link:hover,
+    .sidebar-nav .nav-link.active {
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--brand-1) !important;
+    }
+
+    /* Support Dark Mode Otomatis */
+    [data-bs-theme="dark"] .card-brand {
+        background: var(--admin-bg-dark) !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-bs-theme="dark"] .menu-card {
+        border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    [data-bs-theme="dark"] code.inline {
+        background: rgba(96, 165, 250, 0.15);
+        color: #93c5fd;
+        border-color: rgba(96, 165, 250, 0.25);
+    }
+</style>
+
+<div class="container-fluid py-4 px-4">
+    
+    {{-- Header & Tombol Buka Sidebar --}}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center gap-3">
             <button class="btn btn-menu-toggle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" title="Buka Menu Admin">
-                <span style="font-size: 1.6rem; line-height: 1; font-weight: bold; letter-spacing: 2px;">&#8942;</span>
+                <i class="bi bi-list fs-4"></i>
             </button>
-        </div>
-
-        {{-- SIDEBAR OFFCANVAS --}}
-        <div class="offcanvas offcanvas-start shadow" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
-            <div class="offcanvas-header border-bottom pb-3 mb-3">
-                <h5 class="offcanvas-title fw-bold text-primary" id="adminSidebarLabel">Menu Admin</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-
-            <div class="offcanvas-body flex-column p-3">
-                <div class="mb-4 px-2">
-                    <span class="text-uppercase text-secondary fw-bold" style="font-size: 0.7rem; letter-spacing: .08em;">Panel Admin</span>
-                    <div class="fw-bold fs-6 text-truncate">{{ $user->username }}</div>
-                </div>
-
-                <ul class="nav flex-column gap-1 sidebar-nav mb-4">
-                    <li class="nav-item">
-                        <a href="{{ route('kategori.index') }}" class="nav-link d-flex align-items-center gap-2">
-                            kategori
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('alat.index') }}" class="nav-link d-flex align-items-center gap-2">
-                            alat
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="mt-auto pt-3 border-top px-2">
-                    <p class="text-secondary small mb-0">
-                        Masuk sebagai <code class="inline">admin</code>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        {{-- KONTEN UTAMA --}}
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="card card-brand mb-4">
-                    <div class="card-body p-4">
-                        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">Area Admin</span>
-                        <h1 class="h4 mb-2">Halo, {{ $user->username }}</h1>
-                        <p class="text-secondary mb-0">Halaman ini hanya bisa diakses role <code class="inline">admin</code> (middleware <code class="inline">admin</code>).</p>
-                    </div>
-                </div>
-
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <a href="{{ route('admin.roles.index') }}" class="card menu-card text-decoration-none h-100">
-                            <div class="card-body p-4">
-                            <div class="menu-icon">👥</div>
-                                <h2 class="h6 mb-1">tambah role</h2>
-                                <p class="text-secondary small mb-0">Tambah role baru untuk dipakai saat membuat user.</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ route('admin.users.index') }}" class="card menu-card text-decoration-none h-100">
-                            <div class="card-body p-4">
-                                <div class="menu-icon">👥</div>
-                                <h2 class="h6 mb-1">Manage User</h2>
-                                <p class="text-secondary small mb-0">Tambah user baru dan tentukan role-nya.</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ route('admin.database.export') }}" class="card menu-card text-decoration-none h-100">
-                            <div class="card-body p-4">
-                                <div class="menu-icon">💾</div>
-                                <h2 class="h6 mb-1">Download Database</h2>
-                                <p class="text-secondary small mb-0">Unduh seluruh isi database jadi satu file .sql, siap diimpor di server.</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+            <div>
+                <h4 class="fw-bold text-body mb-0">Panel Pengelola Admin</h4>
+                <p class="text-body-secondary small mb-0">Atur hak akses pengguna, struktur role, dan cadangan data sistem.</p>
             </div>
         </div>
     </div>
 
+    {{-- SIDEBAR OFFCANVAS --}}
+    <div class="offcanvas offcanvas-start border-end shadow" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
+        <div class="offcanvas-header border-bottom py-3">
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-primary text-white rounded-3 p-1.5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                    <i class="bi bi-shield-lock-fill fs-6"></i>
+                </div>
+                <h5 class="offcanvas-title fw-bold text-body" id="adminSidebarLabel">Menu Navigasi</h5>
+            </div>
+            <button type="button" class="btn-close text-reset shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column p-3">
+            <div class="mb-3 px-2 py-2 bg-body-tertiary rounded-3 border">
+                <span class="text-uppercase text-body-secondary fw-bold fs-9" style="letter-spacing: .08em;">Pengguna Aktif</span>
+                <div class="fw-bold fs-6 text-truncate text-body">{{ $user->username }}</div>
+            </div>
+
+            <ul class="nav flex-column gap-1 sidebar-nav mb-4">
+                <li class="nav-item">
+                    <a href="{{ route('kategori.index') }}" class="nav-link d-flex align-items-center gap-2">
+                        <i class="bi bi-tags-fill text-primary"></i>
+                        <span>Kelola Kategori Alat</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('alat.index') }}" class="nav-link d-flex align-items-center gap-2">
+                        <i class="bi bi-tools text-warning"></i>
+                        <span>Kelola Inventaris Alat</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('peminjaman.index') }}" class="nav-link d-flex align-items-center gap-2">
+                        <i class="bi bi-box-arrow-up-right text-info"></i>
+                        <span>Daftar Peminjaman</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('pengembalian.index') }}" class="nav-link d-flex align-items-center gap-2">
+                        <i class="bi bi-arrow-return-left text-success"></i>
+                        <span>Daftar Pengembalian</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mt-auto pt-3 border-top px-2">
+                <p class="text-body-secondary small mb-0">
+                    Otorisasi Role: <code class="inline">admin</code>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {{-- BANNER AREA ADMIN --}}
+    <div class="card card-brand shadow-sm mb-4">
+        <div class="card-body p-4 p-lg-5">
+            <span class="badge badge-brand mb-3">
+                <i class="bi bi-shield-check"></i> Hak Akses Khusus Admin
+            </span>
+            <h1 class="h3 fw-bold text-body mb-2">Halo, {{ $user->username }}! 👋</h1>
+            <p class="text-body-secondary mb-0" style="max-width: 600px;">
+                Halaman ini dikhususkan bagi role <code class="inline">admin</code> (Middleware terproteksi) untuk mengelola akun pengguna, hak akses role, serta ekspor database secara langsung.
+            </p>
+        </div>
+    </div>
+
+    {{-- SEKSI KARTU PINTASAN ADMIN --}}
+    <div class="row g-4">
+        
+        <!-- Kartu 1: Tambah & Kelola Role -->
+        <div class="col-md-4">
+            <a href="{{ route('admin.roles.index') }}" class="card menu-card text-decoration-none h-100">
+                <div class="card-body p-4">
+                    <div class="menu-icon bg-primary-subtle text-primary">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </div>
+                    <h2 class="h6 fw-bold mb-1 text-body">Kelola Role & Akses</h2>
+                    <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
+                        Atur struktur peran baru untuk membatasi hak akses sistem saat registrasi/penambahan user.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Kartu 2: Manage User -->
+        <div class="col-md-4">
+            <a href="{{ route('admin.users.index') }}" class="card menu-card text-decoration-none h-100">
+                <div class="card-body p-4">
+                    <div class="menu-icon bg-info-subtle text-info">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h2 class="h6 fw-bold mb-1 text-body">Manajemen Pengguna</h2>
+                    <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
+                        Tambah akun pengguna baru, ubah rincian informasi profil, serta tentukan role masing-masing.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Kartu 3: Backup Database -->
+        <div class="col-md-4">
+            <a href="{{ route('admin.database.export') }}" class="card menu-card text-decoration-none h-100">
+                <div class="card-body p-4">
+                    <div class="menu-icon bg-success-subtle text-success">
+                        <i class="bi bi-database-fill-down"></i>
+                    </div>
+                    <h2 class="h6 fw-bold mb-1 text-body">Unduh Database SQL</h2>
+                    <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
+                        Ekspor seluruh tabel dan data inventaris ke dalam skrip `.sql` untuk keperluan pencadangan.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+</div>
 @endsection

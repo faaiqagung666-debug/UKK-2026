@@ -1,189 +1,203 @@
 @extends('layouts.app')
 
-@section('title', config('app.name') . ' -- Kerangka PHP Ringan')
+@section('title', config('app.name') . ' -- Manajemen Kategori Alat')
 
 @section('content')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <style>
-        :root {
-            --brand-1: #4f8dff;
-            --brand-2: #7c5cff;
-            --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(79,141,255,0.10), transparent 45%),
-                            radial-gradient(circle at 80% 30%, rgba(124,92,255,0.10), transparent 45%);
-            --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(79,141,255,0.18), transparent 45%),
-                           radial-gradient(circle at 80% 30%, rgba(124,92,255,0.18), transparent 45%);
-        }
+<style>
+    :root {
+        --brand-1: #2563eb;
+        --brand-2: #7c3aed;
+        --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
+                         radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
+        --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
+                        radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+    }
 
-        .hero-wrap {
-            position: relative;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            padding: 2rem 1.5rem;
-            background: var(--hero-bg-light);
-            margin-bottom: 1.5rem;
-            transition: background 0.3s ease;
-        }
+    .hero-wrap {
+        position: relative;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        padding: 2.5rem 1.5rem;
+        background: var(--hero-bg-light);
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        transition: background 0.3s ease;
+    }
 
-        .badge-brand {
-            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-            color: #fff !important;
-            font-weight: 600;
-            letter-spacing: .03em;
-            box-shadow: 0 4px 18px rgba(79,141,255,0.35);
-            display: inline-flex;
-            align-items: center;
-            gap: .4rem;
-        }
-        .badge-brand::before {
-            content: "🗂️";
-            font-size: .9rem;
-        }
+    .badge-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        color: #fff !important;
+        font-weight: 600;
+        letter-spacing: .03em;
+        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
+    }
 
-        .text-brand {
-            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+    .text-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
 
-        .btn-brand {
-            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-            border: none;
-            color: #fff;
-            font-weight: 600;
-            border-radius: .8rem;
-            box-shadow: 0 6px 20px rgba(79,141,255,0.35);
-            transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-        }
-        .btn-brand:hover,
-        .btn-brand:focus {
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 26px rgba(79,141,255,0.45);
-            filter: brightness(1.05);
-        }
-        .btn-brand:active {
-            transform: translateY(0);
-        }
+    .btn-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: .8rem;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-brand:hover,
+    .btn-brand:focus {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(37, 99, 235, 0.4);
+        filter: brightness(1.05);
+    }
 
-        .card-brand {
-            border: 1px solid rgba(127,127,127,0.12);
-            border-radius: 1.2rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-            background: #ffffff;
-            color: inherit;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-        }
+    .card-brand {
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        border-radius: 1.2rem;
+        background: var(--bs-body-bg);
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
 
-        .table-brand {
-            color: inherit;
-        }
-        .table-brand thead {
-            background: rgba(79,141,255,0.08);
-        }
-        .table-brand thead th {
-            border-bottom: none;
-            font-weight: 700;
-            font-size: .85rem;
-            text-transform: uppercase;
-            letter-spacing: .03em;
-            color: #4a4a4a;
-        }
-        .table-brand tbody tr {
-            transition: background-color .15s ease;
-        }
-        .table-brand tbody tr:hover {
-            background-color: rgba(79,141,255,0.05);
-        }
+    code.inline {
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--brand-1);
+        padding: .25rem .6rem;
+        border-radius: .5rem;
+        font-size: .8rem;
+        font-weight: 600;
+        border: 1px solid rgba(37, 99, 235, 0.18);
+    }
 
-        code.inline {
-            background: rgba(127,127,127,0.12);
-            padding: .2rem .55rem;
-            border-radius: .5rem;
-            font-size: .8rem;
-            border: 1px solid rgba(127,127,127,0.18);
-            color: inherit;
-        }
+    /* Support Dark Mode Otomatis */
+    [data-bs-theme="dark"] .hero-wrap {
+        background: var(--hero-bg-dark);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    [data-bs-theme="dark"] code.inline {
+        background: rgba(96, 165, 250, 0.15);
+        color: #93c5fd;
+        border-color: rgba(96, 165, 250, 0.25);
+    }
+</style>
 
-        /* Support Dark Mode Otomatis (Sistem & Bootstrap 5.3) */
-        @media (prefers-color-scheme: dark) {
-            .hero-wrap { background: var(--hero-bg-dark); }
-            .card-brand { 
-                background: #1f1f23 !important; 
-                border-color: rgba(255, 255, 255, 0.08) !important;
-            }
-            .table-brand thead { background: rgba(79,141,255,0.12); }
-            .table-brand thead th { color: #d0d0d0 !important; }
-        }
+<div class="container-fluid py-4 px-4">
 
-        [data-bs-theme="dark"] .hero-wrap {
-            background: var(--hero-bg-dark);
-        }
-        [data-bs-theme="dark"] .card-brand {
-            background: #1f1f23 !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
-        }
-        [data-bs-theme="dark"] .table-brand thead {
-            background: rgba(79,141,255,0.12);
-        }
-        [data-bs-theme="dark"] .table-brand thead th {
-            color: #d0d0d0 !important;
-        }
-    </style>
+    {{-- Alert Notifikasi Sukses --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                <div class="small fw-medium">{{ session('success') }}</div>
+            </div>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-    {{-- Hero --}}
-    <section class="text-center py-3 py-lg-4 hero-wrap">
-        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">Manajemen Kategori</span>
+    {{-- Hero Section --}}
+    <section class="text-center hero-wrap mb-4 shadow-sm">
+        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">
+            <i class="bi bi-tags-fill me-1"></i> Sarpras & Inventaris
+        </span>
 
         <h1 class="display-6 fw-bold mb-2 text-body">
-            Daftar <span class="text-brand">Kategori</span>
+            Kategori <span class="text-brand">Peralatan Sekolah</span>
         </h1>
 
-        <p class="text-secondary mx-auto mb-3" style="max-width: 560px;">
-            Kelola kategori alat/barang sekolah — tambah, ubah, atau hapus sesuai kebutuhan.
+        <p class="text-body-secondary mx-auto mb-4" style="max-width: 560px;">
+            Kelola pengelompokan jenis alat praktikum, olahraga, multimedia, dan laboratorium sekolah untuk mempermudah peminjaman.
         </p>
 
-        <a href="{{ route('kategori.create') }}" class="btn btn-brand px-4">+ Tambah Kategori</a>
+        <a href="{{ route('kategori.create') }}" class="btn btn-brand px-4 py-2.5 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-plus-circle-fill fs-6"></i>
+            <span>Tambah Kategori Baru</span>
+        </a>
     </section>
 
-    {{-- Tabel --}}
-    <div class="card card-brand p-3 p-lg-4">
-        <div class="table-responsive">
-            <table class="table table-sm table-brand align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode Kategori</th>
-                        <th>Nama Kategori</th>
-                        <th>Keterangan</th>
-                        <th class="text-end">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $no = 1; @endphp
-                    @foreach ($kategori as $item)
-                        <tr>
-                            <td class="text-body">{{ $no++ }}</td>
-                            <td><code class="inline">{{ $item->kode_kategori }}</code></td>
-                            <td class="fw-semibold text-body">{{ $item->nama_kategori }}</td>
-                            <td class="text-secondary">{{ $item->keterangan }}</td>
-                            <td class="text-end">
-                                <a href="{{ route('kategori.edit', ['id_kategori' => $item->id_kategori]) }}" class="btn btn-info btn-sm">Edit</a>
-                                <form action="{{ route('kategori.destroy', ['id_kategori' => $item->id_kategori]) }}"
-                                      method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">Hapus</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    {{-- Card Tabel --}}
+    <div class="card card-brand shadow-sm overflow-hidden">
+        <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-folder-symlink text-primary fs-5"></i>
+                <h6 class="fw-bold mb-0 text-body">Daftar Kategori Terdaftar</h6>
+            </div>
+            <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
+                Total: {{ count($kategori) }} Kategori
+            </span>
         </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
+                        <tr>
+                            <th class="py-3 px-4 text-center" style="width: 5%;">No</th>
+                            <th class="py-3 px-3" style="width: 20%;">Kode Kategori</th>
+                            <th class="py-3 px-3" style="width: 25%;">Nama Kategori</th>
+                            <th class="py-3 px-3">Keterangan</th>
+                            <th class="py-3 px-4 text-center" style="width: 180px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        @php $no = 1; @endphp
+                        @forelse ($kategori as $item)
+                            <tr>
+                                <td class="px-4 text-center text-body-secondary fw-medium fs-7">{{ $no++ }}</td>
+                                <td class="px-3">
+                                    <code class="inline">#{{ $item->kode_kategori }}</code>
+                                </td>
+                                <td class="px-3">
+                                    <span class="fw-bold text-body fs-7">{{ $item->nama_kategori }}</span>
+                                </td>
+                                <td class="px-3">
+                                    <span class="text-body-secondary fs-7">{{ $item->keterangan ?? '-' }}</span>
+                                </td>
+                                <td class="px-4 text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center gap-1.5">
+                                        <a href="{{ route('kategori.edit', ['id_kategori' => $item->id_kategori]) }}" class="btn btn-sm btn-outline-warning fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7" title="Edit Kategori">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+                                        
+                                        <form action="{{ route('kategori.destroy', ['id_kategori' => $item->id_kategori]) }}" method="POST" class="d-inline m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')" title="Hapus Kategori">
+                                                <i class="bi bi-trash"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-body-secondary">
+                                    <div class="d-flex flex-column align-items-center gap-2">
+                                        <div class="bg-body-tertiary rounded-circle p-3 mb-1">
+                                            <i class="bi bi-folder-x text-body-secondary fs-2 opacity-50"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0 text-body">Belum Ada Kategori Peralatan</h6>
+                                        <span class="fs-7 text-body-secondary">Silakan tambahkan kategori baru untuk mengelompokkan barang sarpras.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- Pagination --}}
+        @if(method_exists($kategori, 'hasPages') && $kategori->hasPages())
+            <div class="card-footer bg-transparent py-3 border-top d-flex justify-content-end">
+                {!! $kategori->links() !!}
+            </div>
+        @endif
     </div>
 
-    <div class="mt-3">
-        {!! $kategori->links() !!}
-    </div>
+</div>
 @endsection
