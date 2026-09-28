@@ -5,26 +5,75 @@
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+<style>
+    :root {
+        --brand-1: #2563eb;
+        --brand-2: #7c3aed;
+        --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
+                         radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
+        --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
+                        radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+    }
+
+    .hero-wrap {
+        position: relative;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        padding: 2.5rem 1.5rem;
+        background: var(--hero-bg-light);
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        transition: background 0.3s ease;
+    }
+
+    .badge-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        color: #fff !important;
+        font-weight: 600;
+        letter-spacing: .03em;
+        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
+    }
+
+    .text-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .btn-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        border-radius: .8rem;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-brand:hover,
+    .btn-brand:focus {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(37, 99, 235, 0.4);
+        filter: brightness(1.05);
+    }
+
+    .card-brand {
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        border-radius: 1.2rem;
+        background: var(--bs-body-bg);
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Support Dark Mode Otomatis */
+    [data-bs-theme="dark"] .hero-wrap {
+        background: var(--hero-bg-dark);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+</style>
+
 <div class="container-fluid py-4 px-4">
     
-    <!-- Header Halaman & Tombol Tambah -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-        <div>
-            <div class="d-flex align-items-center gap-2 mb-1">
-                <span class="badge bg-primary-subtle text-primary px-2.5 py-1 rounded-pill fw-semibold small">
-                    <i class="bi bi-box-seam me-1"></i> Transaksi Peminjaman
-                </span>
-            </div>
-            <h3 class="fw-bold mb-1 text-body">Daftar Peminjaman Alat</h3>
-            <p class="text-body-secondary small mb-0">Kelola riwayat permohonan, status persetujuan, dan jadwal peminjaman alat sarpras.</p>
-        </div>
-        <a href="{{ route('peminjaman.create') }}" class="btn btn-primary fw-semibold px-3 py-2 rounded-3 shadow-sm d-inline-flex align-items-center gap-2">
-            <i class="bi bi-plus-circle-fill"></i>
-            <span>Tambah Peminjaman Baru</span>
-        </a>
-    </div>
-
-    <!-- Alert Notifikasi Sukses -->
+    {{-- Alert Notifikasi Sukses --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4" role="alert">
             <div class="d-flex align-items-center gap-2">
@@ -35,16 +84,36 @@
         </div>
     @endif
 
-    <!-- Card Pembungkus Tabel -->
-    <div class="card border-0 bg-body-tertiary shadow-sm rounded-4 overflow-hidden mb-4">
+    {{-- Hero Section --}}
+    <section class="text-center hero-wrap mb-4 shadow-sm">
+        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">
+            <i class="bi bi-box-seam me-1"></i> Transaksi Peminjaman
+        </span>
+
+        <h1 class="display-6 fw-bold mb-2 text-body">
+            Daftar <span class="text-brand">Peminjaman Alat</span>
+        </h1>
+
+        <p class="text-body-secondary mx-auto mb-4" style="max-width: 560px;">
+            Kelola riwayat permohonan, status persetujuan, dan jadwal peminjaman alat sarpras dengan mudah.
+        </p>
+
+        <a href="{{ route('peminjaman.create') }}" class="btn btn-brand px-4 py-2.5 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-plus-circle-fill fs-6"></i>
+            <span>Tambah Peminjaman Baru</span>
+        </a>
+    </section>
+
+    {{-- Card Pembungkus Tabel --}}
+    <div class="card card-brand shadow-sm overflow-hidden mb-4">
         
-        <!-- Header Card -->
+        {{-- Header Card --}}
         <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-list-check text-primary fs-5"></i>
                 <h6 class="fw-bold mb-0 text-body">Data Peminjaman Aktif</h6>
             </div>
-            <span class="badge bg-body text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
+            <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
                 Total: {{ count($datap) }} Data
             </span>
         </div>
@@ -52,7 +121,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-body border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
+                    <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
                         <tr>
                             <th class="py-3 px-4 text-center" style="width: 5%;">No</th>
                             <th class="py-3 px-3">Peminjam</th>
@@ -92,7 +161,7 @@
 
                             <!-- Jumlah Unit -->
                             <td class="px-3">
-                                <span class="badge bg-body text-body border fw-semibold px-2.5 py-1.5 rounded-2 fs-8">
+                                <span class="badge bg-body-tertiary text-body border fw-semibold px-2.5 py-1.5 rounded-2 fs-8">
                                     {{ $peminjaman->jumlah }} Unit
                                 </span>
                             </td>
@@ -170,7 +239,7 @@
                         <tr>
                             <td colspan="9" class="text-center py-5 text-body-secondary">
                                 <div class="d-flex flex-column align-items-center gap-2">
-                                    <div class="bg-body rounded-circle p-3 mb-1">
+                                    <div class="bg-body-tertiary rounded-circle p-3 mb-1">
                                         <i class="bi bi-inbox text-body-secondary fs-2 opacity-50"></i>
                                     </div>
                                     <h6 class="fw-bold mb-0 text-body">Belum Ada Data Peminjaman</h6>
@@ -184,7 +253,7 @@
             </div>
         </div>
         
-        <!-- Bagian Pagination -->
+        {{-- Bagian Pagination --}}
         @if(method_exists($datap, 'hasPages') && $datap->hasPages())
         <div class="card-footer bg-transparent py-3 border-top d-flex justify-content-end">
             {!! $datap->links() !!}

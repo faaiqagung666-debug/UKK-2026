@@ -11,8 +11,8 @@ class PengembalianController extends Controller
 {
     public function index(Request $request)
     {
-        $datap = Pengembalian::orderBy('id_pengembalian', 'desc')->paginate(10);
-        return view('pengembalian.index', compact('datap'));
+        $data = Pengembalian::orderBy('id_pengembalian', 'desc')->paginate(10);
+        return view('pengembalian.index', compact('data'));
     }
 
     public function create(Request $request)
@@ -49,14 +49,14 @@ class PengembalianController extends Controller
 
     public function edit(Request $request, $id_pengembalian)
     {
-        $datap = Pengembalian::findOrFail($id_pengembalian);
+        $data = Pengembalian::findOrFail($id_pengembalian);
         $peminjaman = Peminjaman::all();
-        return view('pengembalian.edit', compact('datap', 'peminjaman'));
+        return view('pengembalian.edit', compact('data', 'peminjaman'));
     }
 
     public function update(Request $request, $id_pengembalian)
     {
-        $datap = $request->validate([
+        $data = $request->validate([
             'id_peminjaman'        => 'required|integer',
             'tanggal_pengembalian' => 'required|date',
             'terlambat_hari'       => 'nullable|integer|min:0',
@@ -66,7 +66,7 @@ class PengembalianController extends Controller
         ]);
 
         $pengembalian = Pengembalian::findOrFail($id_pengembalian);
-        $pengembalian->update($datap);
+        $pengembalian->update($data);
         
         return redirect(route('pengembalian.index'))->with('success', 'Data pengembalian berhasil diubah.');
     }

@@ -77,16 +77,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
     Route::get('/peminjaman/{id}/edit', [PeminjamanController::class, 'edit'])->name('peminjaman.edit');
-    Route::post('/peminjaman/{id}/update', [PeminjamanController::class, 'update'])->name('peminjaman.update');
-    Route::post('/peminjaman/{id}/delete', [PeminjamanController::class, 'delete'])->name('peminjaman.delete');
+    Route::put('/peminjaman/{id}/update', [PeminjamanController::class, 'update'])->name('peminjaman.update');
+    Route::delete('/peminjaman/{id}/delete', [PeminjamanController::class, 'delete'])->name('peminjaman.delete');
 
-    Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
+   Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
     Route::get('/pengembalian/create', [PengembalianController::class, 'create'])->name('pengembalian.create');
     Route::post('/pengembalian', [PengembalianController::class, 'store'])->name('pengembalian.store');
-    Route::get('/pengembalian/{id}/edit', [PengembalianController::class, 'edit'])->name('pengembalian.edit');
-    Route::post('/pengembalian/{id}/update', [PengembalianController::class, 'update'])->name('pengembalian.update');
-    Route::post('/pengembalian/{id}/delete', [PengembalianController::class, 'delete'])->name('pengembalian.delete');
-
+    Route::get('/pengembalian/{id_pengembalian}/edit', [PengembalianController::class, 'edit'])->name('pengembalian.edit');
+    Route::put('/pengembalian/{id_pengembalian}/update', [PengembalianController::class, 'update'])->name('pengembalian.update');
+    Route::delete('/pengembalian/{id_pengembalian}/delete', [PengembalianController::class, 'delete'])->name('pengembalian.delete');
   });
 
 /*
@@ -102,9 +101,23 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
 // @role:petugas:start
 Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
+    // 1. Dashboard Utama Petugas
     Route::get('/', [DashboardController::class, 'index'])->name('petugas.dashboard');
+    
+    // 2. Fitur Kendali Peminjaman oleh Petugas
+    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('petugas.peminjaman.index');
+    Route::get('/peminjaman/{id}/edit', [PeminjamanController::class, 'edit'])->name('petugas.peminjaman.edit');
+    Route::post('/peminjaman/{id}/update', [PeminjamanController::class, 'update'])->name('petugas.peminjaman.update');
+    
+    // 3. Fitur Kendali Pengembalian oleh Petugas
+    Route::get('/pengembalian', [App\Controllers\PengembalianController::class, 'index'])->name('petugas.pengembalian.index');
+    Route::get('/pengembalian/create', [App\Controllers\PengembalianController::class, 'create'])->name('petugas.pengembalian.create');
+    Route::post('/pengembalian/store', [App\Controllers\PengembalianController::class, 'store'])->name('petugas.pengembalian.store');
+    Route::get('/pengembalian/{id}/edit', [App\Controllers\PengembalianController::class, 'edit'])->name('petugas.pengembalian.edit');
+    Route::post('/pengembalian/{id}/update', [App\Controllers\PengembalianController::class, 'update'])->name('petugas.pengembalian.update');
 });
 // @role:petugas:end
+
 // @role:peminjam:start
 Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('peminjam.dashboard');

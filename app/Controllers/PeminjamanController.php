@@ -5,14 +5,11 @@ namespace App\Controllers;
 use App\Models\Peminjaman;
 use App\Models\alat;
 use App\Models\User;
+use App\Models\Pengembalian; 
 use Sakuci\Http\Request;
 
 class PeminjamanController
 {
-    // ==========================================
-    // BAGIAN ADMIN: Kelola Semua Peminjaman
-    // ==========================================
-
     public function index(Request $request)
     {
         $datap = Peminjaman::orderBy('id_peminjaman', 'desc')->paginate(4);
@@ -30,17 +27,14 @@ class PeminjamanController
     {
         $data = $request->all();
         
-        // Pastikan id_alat dan id_user terisi
         if (empty($data['id_alat']) || empty($data['id_user'])) {
             return redirect()->back()->with('error', 'Silakan pilih user dan alat terlebih dahulu.');
         }
 
-        // Set status default jika belum ada
         if (empty($data['status'])) {
             $data['status'] = 'Pending';
         }
 
-        // Ubah string kosong pada tanggal_kembali menjadi null
         if (empty($data['tanggal_kembali'])) {
             $data['tanggal_kembali'] = null;
         }
@@ -96,11 +90,6 @@ class PeminjamanController
         return redirect(route('peminjaman.index'))->with('success', 'Data peminjaman berhasil dihapus!');
     }
 
-
-    // ==========================================
-    // BAGIAN PEMINJAM / SISWA: Pengajuan Mandiri
-    // ==========================================
-
     public function indexPeminjam(Request $request)
     {
         $currentUser = User::current();
@@ -109,7 +98,7 @@ class PeminjamanController
             return redirect(route('login'))->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        $datap = Peminjaman::where('id_user', $currentUser->id)
+        $datap = Peminjaman::where('id_user', $currentUser->id_user ?? $currentUser->id)
                          ->orderBy('id_peminjaman', 'desc')
                          ->paginate(5);
 
@@ -136,7 +125,8 @@ class PeminjamanController
             return redirect()->back()->with('error', 'Pilih alat yang ingin dipinjam.');
         }
 
-        $data['id_user'] = $currentUser->id ?? $currentUser->id_user;
+        // Memastikan id_user yang diambil benar
+        $data['id_user'] = $currentUser->id_user ?? $currentUser->id;
         $data['status'] = 'Pending';
         
         if (empty($data['tanggal_kembali'])) {
