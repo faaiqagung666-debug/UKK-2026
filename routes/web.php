@@ -9,7 +9,6 @@ use App\Controllers\Core\UserController;
 use App\Controllers\KategoriController;
 use App\Controllers\alatController;
 use App\Controllers\PeminjamanController;
-use App\Controllers\PeminjamPortalController;
 
 use Sakuci\Route;
 
@@ -88,7 +87,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('/pengembalian/{id}/update', [PengembalianController::class, 'update'])->name('pengembalian.update');
     Route::post('/pengembalian/{id}/delete', [PengembalianController::class, 'delete'])->name('pengembalian.delete');
 
-    });
+  });
 
 /*
 |--------------------------------------------------------------------------
@@ -96,22 +95,22 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 |--------------------------------------------------------------------------
 | Blok di bawah ini dikelola otomatis oleh RoleController saat admin
 | menambah, mengganti nama, atau menghapus role lewat /admin/roles.
-| Jangan diedit manual -- perubahan bisa tertimpa.
 */
 // @generated-roles:start
 
-// @role:peminjam:start
-Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('peminjam.dashboard');
-});
-// @role:peminjam:end
+
+
 // @role:petugas:start
 Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('petugas.dashboard');
 });
 // @role:petugas:end
+// @role:peminjam:start
+Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('peminjam.dashboard');
+});
+// @role:peminjam:end
 // @generated-roles:end
-
 /*
 |--------------------------------------------------------------------------
 | Contoh (hapus/ubah sesuai kebutuhan)

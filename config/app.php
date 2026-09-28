@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'name'     => env('APP_NAME', 'Faaiq'),
+    'name'     => env('APP_NAME', 'InventarisHub'),
 
     // Saat true, halaman error menampilkan detail lengkap. Matikan di produksi.
     'debug'    => env('APP_DEBUG', true),
@@ -31,8 +31,8 @@ return [
     ],
 
     'middleware' => [
-        'petugas' => App\Middleware\PetugasOnly::class,
         'peminjam' => App\Middleware\PeminjamOnly::class,
+        'petugas' => App\Middleware\PetugasOnly::class,
         'auth'  => App\Middleware\Authenticate::class,
         'guest' => App\Middleware\RedirectIfAuthenticated::class,
         'admin' => App\Middleware\AdminOnly::class,
