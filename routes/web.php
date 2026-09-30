@@ -121,6 +121,15 @@ Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
 // @role:peminjam:start
 Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('peminjam.dashboard');
+    
+    // Route khusus melihat katalog/daftar alat
+    Route::get('/daftar-alat', [AlatController::class, 'daftarAlatPeminjam'])->name('peminjam.alat');
+
+    // Rute khusus pengguna/peminjam mengajukan peminjaman alat
+    Route::get('/peminjam', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.indexPeminjam');
+    Route::get('/peminjam/ajukan', [PeminjamanController::class, 'createPeminjam'])->name('peminjam.createPeminjam');
+    Route::post('/peminjam/ajukan', [PeminjamanController::class, 'storePeminjam'])->name('peminjam.storePeminjam');
+    Route::get('/riwayat-peminjaman', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.riwayat');
 });
 // @role:peminjam:end
 // @generated-roles:end

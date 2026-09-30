@@ -17,4 +17,3 @@ class DashboardController extends Controller
         return view('core.admin.dashboard', ['user' => User::current()]);
     }
 }
-

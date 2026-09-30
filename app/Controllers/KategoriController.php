@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Sakuci\Controller;
 use Sakuci\Http\Request;
-use App\Models\Kategori;
+use App\Models\kategori;
 
 class KategoriController extends Controller
 {

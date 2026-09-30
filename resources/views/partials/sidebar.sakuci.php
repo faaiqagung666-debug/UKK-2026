@@ -7,6 +7,18 @@
         $dbConnected = false;
     }
     $currentUser = \App\Models\User::current();
+    
+    // Tentukan prefix/role rute aktif berdasarkan role user
+    $rolePrefix = '';
+    if ($currentUser) {
+        if ($currentUser->role === 'admin') {
+            $rolePrefix = 'admin.';
+        } elseif ($currentUser->role === 'petugas') {
+            $rolePrefix = 'petugas.';
+        } else {
+            $rolePrefix = 'peminjam.';
+        }
+    }
 @endphp
 
 <!-- OFFCANVAS SIDEBAR (Bisa dibuka & ditutup di semua layar) -->
@@ -43,30 +55,75 @@
             @if ($currentUser)
                 <!-- Link Dashboard -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('admin.dashboard', 'dashboard') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}"
-                       href="{{ $currentUser->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}">
+                    <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('admin.dashboard', 'dashboard', 'petugas.dashboard', 'peminjam.dashboard') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}"
+                        href="{{ 
+                            $currentUser->role === 'admin' ? route('admin.dashboard') : 
+                            ($currentUser->role === 'petugas' ? route('petugas.dashboard') : route('peminjam.dashboard')) 
+                        }}">
                         <i class="bi bi-speedometer2 fs-5"></i>
                         <span class="fw-medium">Dashboard</span>
                     </a>
                 </li>
 
-                <!-- Link Peminjaman Alat -->
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjaman.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
-                       href="{{ route('peminjaman.index') }}">
-                        <i class="bi bi-box-arrow-up-right fs-5"></i>
-                        <span class="fw-medium">Peminjaman Alat</span>
-                    </a>
-                </li>
+                {{-- MENU KHUSUS ADMIN & PETUGAS --}}
+                @if (in_array($currentUser->role, ['admin', 'petugas']))
+                    <!-- Link Data Alat (Admin) -->
+                    @if($currentUser->role === 'admin')
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('alat.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('alat.index') }}">
+                            <i class="bi bi-tools fs-5"></i>
+                            <span class="fw-medium">Kelola Alat</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('kategori.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('kategori.index') }}">
+                            <i class="bi bi-tags fs-5"></i>
+                            <span class="fw-medium">Kategori Alat</span>
+                        </a>
+                    </li>
+                    @endif
 
-                <!-- Link Pengembalian Alat -->
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('pengembalian.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
-                       href="{{ route('pengembalian.index') }}">
-                        <i class="bi bi-arrow-return-left fs-5"></i>
-                        <span class="fw-medium">Pengembalian Alat</span>
-                    </a>
-                </li>
+                    <!-- Link Peminjaman -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjaman.index', 'petugas.peminjaman.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route($currentUser->role === 'admin' ? 'peminjaman.index' : 'petugas.peminjaman.index') }}">
+                            <i class="bi bi-box-arrow-up-right fs-5"></i>
+                            <span class="fw-medium">Peminjaman Alat</span>
+                        </a>
+                    </li>
+
+                    <!-- Link Pengembalian -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('pengembalian.index', 'petugas.pengembalian.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route($currentUser->role === 'admin' ? 'pengembalian.index' : 'petugas.pengembalian.index') }}">
+                            <i class="bi bi-arrow-return-left fs-5"></i>
+                            <span class="fw-medium">Pengembalian Alat</span>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- MENU KHUSUS PEMINJAM --}}
+                @if ($currentUser->role === 'peminjam')
+                    <!-- Link Katalog Alat -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.alat') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('peminjam.alat') }}">
+                            <i class="bi bi-grid fs-5"></i>
+                            <span class="fw-medium">Katalog Alat</span>
+                        </a>
+                    </li>
+
+                    <!-- Link Riwayat / Pengajuan Peminjaman -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.riwayat', 'peminjam.indexPeminjam') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('peminjam.riwayat') }}">
+                            <i class="bi bi-clock-history fs-5"></i>
+                            <span class="fw-medium">Riwayat Peminjaman</span>
+                        </a>
+                    </li>
+                @endif
             @endif
         </ul>
 
@@ -93,7 +150,6 @@
             @endif
         </div>
     </div>
-
 </div>
 
 <style>

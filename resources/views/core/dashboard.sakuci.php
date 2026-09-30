@@ -5,6 +5,30 @@
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+@php
+    $currentUser = \App\Models\User::current();
+    $role = $currentUser->role ?? 'peminjam';
+
+    // Tentukan URL tujuan berdasarkan role user secara dinamis
+    if ($role === 'admin') {
+        $peminjamanUrl = route('peminjaman.index');
+        $pengembalianUrl = route('pengembalian.index');
+        $kategoriUrl = route('kategori.index');
+        $alatUrl = route('alat.index');
+    } elseif ($role === 'petugas') {
+        $peminjamanUrl = route('petugas.peminjaman.index');
+        $pengembalianUrl = route('petugas.pengembalian.index');
+        $kategoriUrl = route('home'); // Sesuaikan jika petugas punya rute kategori
+        $alatUrl = route('alat.index');
+    } else {
+        // Role: Peminjam / Siswa
+        $peminjamanUrl = route('peminjam.riwayat'); // Mengarah ke riwayat / pengajuan peminjam
+        $pengembalianUrl = route('peminjam.riwayat'); // Peminjam melihat status di riwayat
+        $kategoriUrl = route('peminjam.alat'); // Katalog alat peminjam
+        $alatUrl = route('peminjam.alat'); // Katalog alat peminjam
+    }
+@endphp
+
 <style>
     :root {
         --brand-1: #2563eb;
@@ -104,12 +128,12 @@
     <div class="card dashboard-hero mb-4 shadow-sm">
         <div class="card-body p-4 p-lg-5 position-relative z-1">
             <div class="d-flex align-items-center gap-2 mb-3">
-                <span class="badge badge-role">
-                    <i class="bi bi-shield-lock-fill"></i> Role: {{ $user->role ?? 'Pengguna' }}
+                <span class="badge badge-role text-capitalize">
+                    <i class="bi bi-shield-lock-fill"></i> Role: {{ $role }}
                 </span>
             </div>
             
-            <h1 class="h3 fw-bold mb-2 text-body">Selamat Datang, {{ $user->username }}! 👋</h1>
+            <h1 class="h3 fw-bold mb-2 text-body">Selamat Datang, {{ $currentUser->username ?? 'Pengguna' }}! 👋</h1>
             <p class="text-body-secondary mb-0" style="max-width: 620px; font-size: 0.95rem; line-height: 1.6;">
                 Panel kendali utama sistem peminjaman sarpras dan peralatan sekolah. Pilih menu pintasan cepat di bawah ini untuk mengelola dan memantau inventaris.
             </p>
@@ -125,16 +149,16 @@
     {{-- Kartu Pintasan Interaktif (Quick Actions Grid) --}}
     <div class="row g-4">
         
-        <!-- Pintasan 1: Ajukan Peminjaman -->
+        <!-- Pintasan 1: Peminjaman Alat -->
         <div class="col-md-6 col-xl-3">
-            <a href="{{ route('peminjaman.index') }}" class="card quick-action-card text-decoration-none h-100">
+            <a href="{{ $peminjamanUrl }}" class="card quick-action-card text-decoration-none h-100">
                 <div class="card-body p-4">
                     <div class="action-icon bg-primary-subtle text-primary">
                         <i class="bi bi-box-arrow-up-right"></i>
                     </div>
                     <h2 class="h6 fw-bold mb-1 text-body">Peminjaman Alat</h2>
                     <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
-                        Ajukan peminjaman alat sarpras, cek status persetujuan, dan jadwal penggunaan.
+                        {{ $role === 'peminjam' ? 'Ajukan peminjaman alat baru dan pantau daftar riwayat.' : 'Kelola peminjaman alat sarpras dan cek status persetujuan.' }}
                     </p>
                 </div>
             </a>
@@ -142,14 +166,14 @@
 
         <!-- Pintasan 2: Pengembalian -->
         <div class="col-md-6 col-xl-3">
-            <a href="{{ route('pengembalian.index') }}" class="card quick-action-card text-decoration-none h-100">
+            <a href="{{ $pengembalianUrl }}" class="card quick-action-card text-decoration-none h-100">
                 <div class="card-body p-4">
                     <div class="action-icon bg-success-subtle text-success">
                         <i class="bi bi-arrow-return-left"></i>
                     </div>
                     <h2 class="h6 fw-bold mb-1 text-body">Pengembalian</h2>
                     <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
-                        Kelola data pengembalian alat, denda keterlambatan, dan pemeriksaan kondisi.
+                        {{ $role === 'peminjam' ? 'Periksa status pengembalian barang dan rincian denda Anda.' : 'Kelola data pengembalian alat dan denda keterlambatan.' }}
                     </p>
                 </div>
             </a>
@@ -157,7 +181,7 @@
 
         <!-- Pintasan 3: Kategori Barang -->
         <div class="col-md-6 col-xl-3">
-            <a href="{{ route('kategori.index') }}" class="card quick-action-card text-decoration-none h-100">
+            <a href="{{ $kategoriUrl }}" class="card quick-action-card text-decoration-none h-100">
                 <div class="card-body p-4">
                     <div class="action-icon bg-info-subtle text-info">
                         <i class="bi bi-tags-fill"></i>
@@ -172,14 +196,14 @@
 
         <!-- Pintasan 4: Daftar Alat -->
         <div class="col-md-6 col-xl-3">
-            <a href="{{ route('alat.index') }}" class="card quick-action-card text-decoration-none h-100">
+            <a href="{{ $alatUrl }}" class="card quick-action-card text-decoration-none h-100">
                 <div class="card-body p-4">
                     <div class="action-icon bg-warning-subtle text-warning">
                         <i class="bi bi-tools"></i>
                     </div>
                     <h2 class="h6 fw-bold mb-1 text-body">Daftar Alat</h2>
                     <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
-                        Periksa ketersediaan alat inventaris sekolah lengkap dengan kodenya.
+                        {{ $role === 'peminjam' ? 'Lihat katalog alat sekolah yang tersedia untuk dipinjam.' : 'Periksa ketersediaan alat inventaris lengkap dengan kodenya.' }}
                     </p>
                 </div>
             </a>
