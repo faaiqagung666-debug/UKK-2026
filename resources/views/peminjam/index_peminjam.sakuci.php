@@ -6,13 +6,33 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
     :root {
-        --brand-1: #2563eb;
-        --brand-2: #7c3aed;
-        --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
-                         radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
-        --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
-                        radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+        --brand-1: #0d7a50;
+        --brand-2: #064e3b;
+        --whistle: #d9f24b;
+        --brand-soft: rgba(13, 122, 80, 0.10);
+        --brand-border: rgba(13, 122, 80, 0.18);
+        --hero-bg-light:
+            radial-gradient(circle at 20% 20%, rgba(13, 122, 80, 0.08), transparent 45%),
+            radial-gradient(circle at 80% 30%, rgba(217, 242, 75, 0.08), transparent 45%);
+        --hero-bg-dark:
+            radial-gradient(circle at 20% 20%, rgba(13, 122, 80, 0.18), transparent 45%),
+            radial-gradient(circle at 80% 30%, rgba(217, 242, 75, 0.10), transparent 45%);
+    }
+
+    .riwayat-peminjaman-page {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .riwayat-peminjaman-page h1,
+    .riwayat-peminjaman-page h2,
+    .riwayat-peminjaman-page h3,
+    .riwayat-peminjaman-page h4,
+    .riwayat-peminjaman-page h5,
+    .riwayat-peminjaman-page h6 {
+        font-family: 'Bricolage Grotesque', sans-serif;
     }
 
     .hero-wrap {
@@ -21,16 +41,47 @@
         overflow: hidden;
         padding: 2.5rem 1.5rem;
         background: var(--hero-bg-light);
-        border: 1px solid rgba(127, 127, 127, 0.12);
+        border: 1px solid var(--brand-border);
         transition: background 0.3s ease;
+        box-shadow: 0 10px 30px rgba(13, 122, 80, 0.08);
+        animation: heroIn .6s ease both;
+    }
+
+    .hero-wrap::before,
+    .hero-wrap::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        border: 2px solid rgba(13, 122, 80, 0.10);
+        border-radius: 50%;
+    }
+
+    .hero-wrap::before {
+        width: 330px;
+        height: 330px;
+        right: -150px;
+        top: -185px;
+    }
+
+    .hero-wrap::after {
+        width: 250px;
+        height: 250px;
+        left: -130px;
+        bottom: -170px;
+    }
+
+    .hero-wrap > * {
+        position: relative;
+        z-index: 2;
     }
 
     .badge-brand {
-        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-        color: #fff !important;
-        font-weight: 600;
+        background: var(--whistle);
+        color: var(--brand-2) !important;
+        font-weight: 800;
         letter-spacing: .03em;
-        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
+        box-shadow: 0 4px 18px rgba(13, 122, 80, 0.18);
+        animation: badgePulse 2.8s ease-in-out infinite;
     }
 
     .text-brand {
@@ -41,19 +92,134 @@
     }
 
     .card-brand {
-        border: 1px solid rgba(127, 127, 127, 0.12);
+        border: 1px solid var(--brand-border);
         border-radius: 1.2rem;
         background: var(--bs-body-bg);
-        transition: background 0.3s ease, border-color 0.3s ease;
+        transition: background 0.3s ease, border-color 0.3s ease,
+                    box-shadow 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.035);
+        overflow: hidden;
+        animation: fadeUp .55s ease both;
+    }
+
+    .card-brand:hover {
+        border-color: rgba(13, 122, 80, 0.28);
+        box-shadow: 0 10px 28px rgba(13, 122, 80, 0.08);
+    }
+
+    .card-brand .card-header {
+        border-bottom-color: var(--brand-border) !important;
+    }
+
+    .card-brand .card-header .text-primary {
+        color: var(--brand-1) !important;
+    }
+
+    .card-brand table thead {
+        background: rgba(13, 122, 80, 0.045) !important;
+    }
+
+    .card-brand table tbody tr {
+        transition: background .2s ease;
+    }
+
+    .card-brand table tbody tr:hover {
+        background: rgba(13, 122, 80, 0.045);
+    }
+
+    .card-brand table tbody tr td:first-child {
+        position: relative;
+    }
+
+    .card-brand table tbody tr:hover td:first-child::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 10%;
+        bottom: 10%;
+        width: 3px;
+        border-radius: 0 4px 4px 0;
+        background: var(--brand-1);
+    }
+
+    .card-brand .btn-success {
+        background: var(--brand-1) !important;
+        border-color: var(--brand-1) !important;
+    }
+
+    .card-brand .btn-success:hover {
+        background: var(--brand-2) !important;
+        border-color: var(--brand-2) !important;
+        transform: translateY(-1px);
+    }
+
+    .card-brand .form-select:focus {
+        border-color: var(--brand-1);
+        box-shadow: 0 0 0 .2rem rgba(13, 122, 80, 0.12);
     }
 
     [data-bs-theme="dark"] .hero-wrap {
         background: var(--hero-bg-dark);
         border-color: rgba(255, 255, 255, 0.08);
     }
+
+    [data-bs-theme="dark"] .card-brand {
+        border-color: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    [data-bs-theme="dark"] .card-brand:hover {
+        border-color: rgba(217, 242, 75, 0.20);
+    }
+
+    @keyframes heroIn {
+        from {
+            opacity: 0;
+            transform: translateY(-12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes badgePulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.03);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-wrap {
+            border-radius: 1.25rem;
+            padding: 2rem 1rem;
+        }
+
+        .hero-wrap h1 {
+            font-size: 1.7rem;
+        }
+
+        .card-brand {
+            border-radius: 1rem;
+        }
+    }
 </style>
 
-<div class="container-fluid py-4 px-4">
+<div class="container-fluid py-4 px-4 riwayat-peminjaman-page">
     
     {{-- Alert Notifikasi Sukses --}}
     @if(session('success'))

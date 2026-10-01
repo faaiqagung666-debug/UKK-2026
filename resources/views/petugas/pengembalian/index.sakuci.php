@@ -7,12 +7,18 @@
 
 <style>
     :root {
-        --brand-1: #2563eb;
-        --brand-2: #7c3aed;
-        --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
-                         radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
-        --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
-                        radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+        --brand-1: #0d7a50;
+        --brand-2: #064e3b;
+        --whistle: #d9f24b;
+        --brand-glow: rgba(13, 122, 80, 0.22);
+
+        --hero-bg-light:
+            radial-gradient(circle at 20% 20%, rgba(13, 122, 80, 0.08), transparent 45%),
+            radial-gradient(circle at 80% 30%, rgba(217, 242, 75, 0.12), transparent 45%);
+
+        --hero-bg-dark:
+            radial-gradient(circle at 20% 20%, rgba(13, 122, 80, 0.20), transparent 45%),
+            radial-gradient(circle at 80% 30%, rgba(217, 242, 75, 0.08), transparent 45%);
     }
 
     .hero-wrap {
@@ -21,8 +27,8 @@
         overflow: hidden;
         padding: 2.5rem 1.5rem;
         background: var(--hero-bg-light);
-        border: 1px solid rgba(127, 127, 127, 0.12);
-        transition: background 0.3s ease;
+        border: 1px solid rgba(13, 122, 80, 0.12);
+        transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .badge-brand {
@@ -30,7 +36,7 @@
         color: #fff !important;
         font-weight: 600;
         letter-spacing: .03em;
-        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
+        box-shadow: 0 4px 18px var(--brand-glow);
     }
 
     .text-brand {
@@ -41,15 +47,116 @@
     }
 
     .card-brand {
-        border: 1px solid rgba(127, 127, 127, 0.12);
+        border: 1px solid rgba(13, 122, 80, 0.12);
         border-radius: 1.2rem;
         background: var(--bs-body-bg);
         transition: background 0.3s ease, border-color 0.3s ease;
     }
 
+    .card-brand .card-header {
+        border-bottom-color: rgba(13, 122, 80, 0.12) !important;
+    }
+
+    .card-brand .card-header i {
+        color: var(--brand-1) !important;
+    }
+
+    .table {
+        --bs-table-hover-bg: rgba(13, 122, 80, 0.045);
+    }
+
+    .table tbody tr {
+        transition: background-color .18s ease, box-shadow .18s ease;
+    }
+
+    .table tbody tr:hover {
+        box-shadow: inset 4px 0 0 var(--brand-1);
+    }
+
+    .badge-id {
+        background: rgba(13, 122, 80, 0.07);
+        color: var(--brand-1);
+        border-color: rgba(13, 122, 80, 0.18) !important;
+    }
+
+    .alert-success {
+        background: rgba(13, 122, 80, 0.08);
+        color: var(--brand-2);
+    }
+
+    .pagination {
+        margin-bottom: 0;
+        gap: .25rem;
+    }
+
+    .pagination .page-link {
+        border-radius: .6rem;
+        border-color: rgba(13, 122, 80, 0.15);
+        color: var(--brand-1);
+        transition: all .18s ease;
+    }
+
+    .pagination .page-link:hover {
+        background: rgba(13, 122, 80, 0.08);
+        border-color: var(--brand-1);
+        color: var(--brand-2);
+    }
+
+    .pagination .page-item.active .page-link {
+        background: var(--brand-1);
+        border-color: var(--brand-1);
+        color: #fff;
+    }
+
     [data-bs-theme="dark"] .hero-wrap {
         background: var(--hero-bg-dark);
         border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    [data-bs-theme="dark"] .card-brand {
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    [data-bs-theme="dark"] .card-brand .card-header {
+        border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    [data-bs-theme="dark"] .badge-id {
+        background: rgba(217, 242, 75, 0.08);
+        color: var(--whistle);
+        border-color: rgba(217, 242, 75, 0.18) !important;
+    }
+
+    [data-bs-theme="dark"] .alert-success {
+        background: rgba(13, 122, 80, 0.18);
+        color: #a7f3d0;
+    }
+
+    [data-bs-theme="dark"] .table {
+        --bs-table-hover-bg: rgba(13, 122, 80, 0.10);
+    }
+
+    [data-bs-theme="dark"] .pagination .page-link {
+        background: var(--bs-body-bg);
+        border-color: rgba(255, 255, 255, 0.10);
+        color: #a7f3d0;
+    }
+
+    [data-bs-theme="dark"] .pagination .page-item.active .page-link {
+        background: var(--brand-1);
+        border-color: var(--brand-1);
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .hero-wrap {
+            padding: 2rem 1rem;
+        }
+
+        .card-brand .card-header {
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
     }
 </style>
 
@@ -62,7 +169,11 @@
                 <i class="bi bi-check-circle-fill text-success fs-5"></i>
                 <div class="small fw-medium">{{ session('success') }}</div>
             </div>
-            <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+
+            <button type="button"
+                    class="btn-close shadow-none"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
         </div>
     @endif
 
@@ -88,8 +199,11 @@
         <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-journal-check text-primary fs-5"></i>
-                <h6 class="fw-bold mb-0 text-body">Data Transaksi Pengembalian</h6>
+                <h6 class="fw-bold mb-0 text-body">
+                    Data Transaksi Pengembalian
+                </h6>
             </div>
+
             <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
                 Total: {{ $datap->total() }} Data
             </span>
@@ -98,6 +212,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
+
                     <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
                         <tr>
                             <th class="py-3 px-4 text-center" style="width: 5%;">No</th>
@@ -109,6 +224,7 @@
                             <th class="py-3 px-3">Catatan</th>
                         </tr>
                     </thead>
+
                     <tbody class="divide-y">
                         @forelse ($datap as $index => $pengembalian)
                         <tr>
@@ -119,7 +235,7 @@
                             
                             <!-- ID Pinjam -->
                             <td class="px-3">
-                                <span class="badge bg-body-tertiary text-body border fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                <span class="badge badge-id fw-bold px-2.5 py-1.5 rounded-2 fs-8">
                                     #{{ $pengembalian->id_peminjaman }}
                                 </span>
                             </td>
@@ -136,11 +252,13 @@
                             <td class="px-3">
                                 @if(($pengembalian->terlambat_hari ?? 0) > 0)
                                     <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
-                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ $pengembalian->terlambat_hari }} Hari
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                        {{ $pengembalian->terlambat_hari }} Hari
                                     </span>
                                 @else
                                     <span class="badge bg-success-subtle text-success border border-success border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Tepat Waktu
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                        Tepat Waktu
                                     </span>
                                 @endif
                             </td>
@@ -148,7 +266,9 @@
                             <!-- Denda -->
                             <td class="px-3">
                                 @if(($pengembalian->denda ?? 0) > 0)
-                                    <span class="text-danger fw-bold fs-7">Rp {{ number_format($pengembalian->denda, 0, ',', '.') }}</span>
+                                    <span class="text-danger fw-bold fs-7">
+                                        Rp {{ number_format($pengembalian->denda, 0, ',', '.') }}
+                                    </span>
                                 @else
                                     <span class="text-body-secondary fs-7">-</span>
                                 @endif
@@ -159,13 +279,16 @@
                                 @php
                                     $kondisi = strtolower($pengembalian->kondisi_barang ?? 'baik');
                                 @endphp
+
                                 @if(str_contains($kondisi, 'baik'))
                                     <span class="badge bg-success-subtle text-success border border-success border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-2 fs-8">
-                                        <i class="bi bi-check-lg me-1"></i>{{ $pengembalian->kondisi_barang ?? 'Baik' }}
+                                        <i class="bi bi-check-lg me-1"></i>
+                                        {{ $pengembalian->kondisi_barang ?? 'Baik' }}
                                     </span>
                                 @elseif(str_contains($kondisi, 'rusak'))
                                     <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-2 fs-8">
-                                        <i class="bi bi-tools me-1"></i>{{ $pengembalian->kondisi_barang }}
+                                        <i class="bi bi-tools me-1"></i>
+                                        {{ $pengembalian->kondisi_barang }}
                                     </span>
                                 @else
                                     <span class="badge bg-body-tertiary text-body border fw-semibold px-2.5 py-1.5 rounded-2 fs-8">
@@ -176,11 +299,14 @@
 
                             <!-- Catatan -->
                             <td class="px-3">
-                                <span class="text-body-secondary fs-7 text-truncate d-inline-block" style="max-width: 180px;" title="{{ $pengembalian->catatan }}">
+                                <span class="text-body-secondary fs-7 text-truncate d-inline-block"
+                                      style="max-width: 180px;"
+                                      title="{{ $pengembalian->catatan }}">
                                     {{ $pengembalian->catatan ?? '-' }}
                                 </span>
                             </td>
                         </tr>
+
                         @empty
                         <tr>
                             <td colspan="7" class="text-center py-5 text-body-secondary">
@@ -188,13 +314,20 @@
                                     <div class="bg-body-tertiary rounded-circle p-3 mb-1">
                                         <i class="bi bi-inbox text-body-secondary fs-2 opacity-50"></i>
                                     </div>
-                                    <h6 class="fw-bold mb-0 text-body">Belum Ada Data Pengembalian</h6>
-                                    <span class="fs-7 text-body-secondary">Data pengembalian alat yang ditambahkan akan muncul di sini.</span>
+
+                                    <h6 class="fw-bold mb-0 text-body">
+                                        Belum Ada Data Pengembalian
+                                    </h6>
+
+                                    <span class="fs-7 text-body-secondary">
+                                        Data pengembalian alat yang ditambahkan akan muncul di sini.
+                                    </span>
                                 </div>
                             </td>
                         </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -205,6 +338,7 @@
             {!! $datap->links() !!}
         </div>
         @endif
+
     </div>
 
 </div>

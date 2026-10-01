@@ -7,12 +7,18 @@
 
 <style>
     :root {
-        --brand-1: #2563eb;
-        --brand-2: #7c3aed;
-        --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
-                         radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
-        --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
-                        radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+        --brand-1: #0d7a50;
+        --brand-2: #064e3b;
+        --whistle: #d9f24b;
+        --brand-glow: rgba(13, 122, 80, 0.22);
+
+        --hero-bg-light:
+            radial-gradient(circle at 20% 20%, rgba(13, 122, 80, 0.08), transparent 45%),
+            radial-gradient(circle at 80% 30%, rgba(217, 242, 75, 0.12), transparent 45%);
+
+        --hero-bg-dark:
+            radial-gradient(circle at 20% 20%, rgba(13, 122, 80, 0.20), transparent 45%),
+            radial-gradient(circle at 80% 30%, rgba(217, 242, 75, 0.08), transparent 45%);
     }
 
     .hero-wrap {
@@ -21,8 +27,8 @@
         overflow: hidden;
         padding: 2.5rem 1.5rem;
         background: var(--hero-bg-light);
-        border: 1px solid rgba(127, 127, 127, 0.12);
-        transition: background 0.3s ease;
+        border: 1px solid rgba(13, 122, 80, 0.12);
+        transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .badge-brand {
@@ -30,7 +36,7 @@
         color: #fff !important;
         font-weight: 600;
         letter-spacing: .03em;
-        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
+        box-shadow: 0 4px 18px var(--brand-glow);
     }
 
     .text-brand {
@@ -48,22 +54,111 @@
         background: transparent;
         transition: all .18s ease;
     }
-    .btn-brand-outline:hover {
+
+    .btn-brand-outline:hover,
+    .btn-brand-outline:focus {
         background: var(--brand-1);
         color: #fff;
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        border-color: var(--brand-1);
+        box-shadow: 0 6px 20px var(--brand-glow);
+        transform: translateY(-1px);
     }
 
     .card-brand {
-        border: 1px solid rgba(127, 127, 127, 0.12);
+        border: 1px solid rgba(13, 122, 80, 0.12);
         border-radius: 1.2rem;
         background: var(--bs-body-bg);
         transition: background 0.3s ease, border-color 0.3s ease;
     }
 
+    .card-brand .card-header {
+        border-bottom-color: rgba(13, 122, 80, 0.12) !important;
+    }
+
+    .card-brand .card-header i {
+        color: var(--brand-1) !important;
+    }
+
+    .table {
+        --bs-table-hover-bg: rgba(13, 122, 80, 0.045);
+    }
+
+    .table thead th {
+        white-space: nowrap;
+    }
+
+    .table tbody tr {
+        transition: background-color .18s ease, box-shadow .18s ease;
+    }
+
+    .table tbody tr:hover {
+        box-shadow: inset 4px 0 0 var(--brand-1);
+    }
+
+    .badge-id {
+        background: rgba(13, 122, 80, 0.07);
+        color: var(--brand-1);
+        border-color: rgba(13, 122, 80, 0.18) !important;
+    }
+
+    .btn-success {
+        background: var(--brand-1);
+        border-color: var(--brand-1);
+    }
+
+    .btn-success:hover,
+    .btn-success:focus {
+        background: var(--brand-2);
+        border-color: var(--brand-2);
+    }
+
+    .alert-success {
+        background: rgba(13, 122, 80, 0.08);
+        color: var(--brand-2);
+    }
+
     [data-bs-theme="dark"] .hero-wrap {
         background: var(--hero-bg-dark);
         border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    [data-bs-theme="dark"] .card-brand {
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    [data-bs-theme="dark"] .card-brand .card-header {
+        border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    [data-bs-theme="dark"] .badge-id {
+        background: rgba(217, 242, 75, 0.08);
+        color: var(--whistle);
+        border-color: rgba(217, 242, 75, 0.18) !important;
+    }
+
+    [data-bs-theme="dark"] .alert-success {
+        background: rgba(13, 122, 80, 0.18);
+        color: #a7f3d0;
+    }
+
+    [data-bs-theme="dark"] .table {
+        --bs-table-hover-bg: rgba(13, 122, 80, 0.10);
+    }
+
+    @media (max-width: 768px) {
+        .hero-wrap {
+            padding: 2rem 1rem;
+        }
+
+        .hero-wrap .btn-brand-outline {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .card-brand .card-header {
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
     }
 </style>
 
@@ -94,7 +189,9 @@
             Setujui atau tolak permohonan peminjaman alat dari peminjam, serta cetak laporan berkala dengan mudah.
         </p>
 
-        <a href="{{ route('petugas.peminjaman.cetak') }}" target="_blank" class="btn btn-brand-outline px-4 py-2.5 d-inline-flex align-items-center gap-2">
+        <a href="{{ route('petugas.peminjaman.cetak') }}"
+           target="_blank"
+           class="btn btn-brand-outline px-4 py-2.5 d-inline-flex align-items-center gap-2">
             <i class="bi bi-printer fs-6"></i>
             <span>Cetak Laporan Peminjaman</span>
         </a>
@@ -109,6 +206,7 @@
                 <i class="bi bi-list-check text-primary fs-5"></i>
                 <h6 class="fw-bold mb-0 text-body">Daftar Permohonan Peminjaman</h6>
             </div>
+
             <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
                 Total: {{ count($datap) }} Data
             </span>
@@ -117,6 +215,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
+
                     <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
                         <tr>
                             <th class="py-3 px-4 text-center" style="width: 5%;">No</th>
@@ -129,28 +228,33 @@
                             <th class="py-3 px-4 text-center" style="width: 180px;">Aksi Petugas</th>
                         </tr>
                     </thead>
+
                     <tbody class="divide-y">
                         @forelse($datap as $index => $p)
                         <tr>
-                            <td class="px-4 text-center text-body-secondary fw-medium fs-7">{{ $index + 1 }}</td>
+                            <td class="px-4 text-center text-body-secondary fw-medium fs-7">
+                                {{ $index + 1 }}
+                            </td>
                             
                             <!-- ID User -->
                             <td class="px-3">
-                                <span class="badge bg-body-tertiary text-body border fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                <span class="badge badge-id fw-bold px-2.5 py-1.5 rounded-2 fs-8">
                                     #{{ $p->id_user }}
                                 </span>
                             </td>
 
                             <!-- ID Alat -->
                             <td class="px-3">
-                                <span class="badge bg-body-tertiary text-body border fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                <span class="badge badge-id fw-bold px-2.5 py-1.5 rounded-2 fs-8">
                                     #{{ $p->id_alat }}
                                 </span>
                             </td>
 
                             <!-- Jumlah -->
                             <td class="px-3">
-                                <span class="text-body fw-semibold fs-7">{{ $p->jumlah }} Unit</span>
+                                <span class="text-body fw-semibold fs-7">
+                                    {{ $p->jumlah }} Unit
+                                </span>
                             </td>
 
                             <!-- Tanggal Pinjam -->
@@ -175,14 +279,17 @@
                                     <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
                                         <i class="bi bi-clock-history me-1"></i>Pending
                                     </span>
+
                                 @elseif($p->status == 'Disetujui')
                                     <span class="badge bg-success-subtle text-success border border-success border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
                                         <i class="bi bi-check-circle-fill me-1"></i>Disetujui
                                     </span>
+
                                 @elseif($p->status == 'Ditolak')
                                     <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
                                         <i class="bi bi-x-circle-fill me-1"></i>Ditolak
                                     </span>
+
                                 @else
                                     <span class="badge bg-info-subtle text-info border border-info border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
                                         {{ $p->status }}
@@ -194,23 +301,39 @@
                             <td class="px-4 text-center">
                                 @if($p->status == 'Pending')
                                     <div class="d-inline-flex align-items-center justify-content-center gap-1.5">
+
                                         <!-- Tombol Setujui -->
-                                        <form action="{{ route('petugas.peminjaman.status', ['id' => $p->id_peminjaman]) }}" method="POST" class="d-inline m-0">
+                                        <form action="{{ route('petugas.peminjaman.status', ['id' => $p->id_peminjaman]) }}"
+                                              method="POST"
+                                              class="d-inline m-0">
                                             @csrf
                                             @method('PUT')
+
                                             <input type="hidden" name="status" value="Disetujui">
-                                            <button type="submit" class="btn btn-sm btn-success fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7" title="Setujui Peminjaman">
-                                                <i class="bi bi-check-lg"></i> Setujui
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-success fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7"
+                                                    title="Setujui Peminjaman">
+                                                <i class="bi bi-check-lg"></i>
+                                                Setujui
                                             </button>
                                         </form>
                                         
                                         <!-- Tombol Tolak -->
-                                        <form action="{{ route('petugas.peminjaman.status', ['id' => $p->id_peminjaman]) }}" method="POST" class="d-inline m-0">
+                                        <form action="{{ route('petugas.peminjaman.status', ['id' => $p->id_peminjaman]) }}"
+                                              method="POST"
+                                              class="d-inline m-0">
                                             @csrf
                                             @method('PUT')
+
                                             <input type="hidden" name="status" value="Ditolak">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7" onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')" title="Tolak Peminjaman">
-                                                <i class="bi bi-x-lg"></i> Tolak
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7"
+                                                    onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')"
+                                                    title="Tolak Peminjaman">
+                                                <i class="bi bi-x-lg"></i>
+                                                Tolak
                                             </button>
                                         </form>
                                     </div>
@@ -221,6 +344,7 @@
                                 @endif
                             </td>
                         </tr>
+
                         @empty
                         <tr>
                             <td colspan="8" class="text-center py-5 text-body-secondary">
@@ -228,12 +352,19 @@
                                     <div class="bg-body-tertiary rounded-circle p-3 mb-1">
                                         <i class="bi bi-folder2-open text-body-secondary fs-2 opacity-50"></i>
                                     </div>
-                                    <h6 class="fw-bold mb-0 text-body">Belum Ada Data Peminjaman</h6>
-                                    <span class="fs-7 text-body-secondary">Permohonan peminjaman alat yang masuk akan muncul di sini.</span>
+
+                                    <h6 class="fw-bold mb-0 text-body">
+                                        Belum Ada Data Peminjaman
+                                    </h6>
+
+                                    <span class="fs-7 text-body-secondary">
+                                        Permohonan peminjaman alat yang masuk akan muncul di sini.
+                                    </span>
                                 </div>
                             </td>
                         </tr>
                         @endforelse
+
                     </tbody>
                 </table>
             </div>
