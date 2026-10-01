@@ -80,45 +80,19 @@
     }
 
     .menu-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 0.85rem;
+        width: 52px;
+        height: 52px;
+        border-radius: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        margin-bottom: 1.25rem;
+        transition: transform 0.2s ease;
     }
 
-    /* Styling Tombol Titik Tiga (Sidebar Toggler) */
-    .btn-menu-toggle {
-        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-        border: none;
-        border-radius: 0.85rem;
-        width: 44px;
-        height: 44px;
-        color: #ffffff;
-        box-shadow: 0 4px 15px var(--brand-glow);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .btn-menu-toggle:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-        color: #ffffff;
-    }
-
-    /* Sidebar Navigasi */
-    .sidebar-nav .nav-link {
-        color: var(--bs-body-color);
-        border-radius: 0.75rem;
-        padding: 0.7rem 1rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-    .sidebar-nav .nav-link:hover,
-    .sidebar-nav .nav-link.active {
-        background: rgba(37, 99, 235, 0.1);
-        color: var(--brand-1) !important;
+    .menu-card:hover .menu-icon {
+        transform: scale(1.08);
     }
 
     /* Support Dark Mode Otomatis */
@@ -138,68 +112,15 @@
 
 <div class="container-fluid py-4 px-4">
     
-    {{-- Header & Tombol Buka Sidebar --}}
+    {{-- Header dengan Ikon di Sebelah Judul Panel --}}
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-menu-toggle d-flex align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" title="Buka Menu Admin">
-                <i class="bi bi-list fs-4"></i>
-            </button>
+            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 1.4rem;">
+                <i class="bi bi-shield-shaded"></i>
+            </div>
             <div>
                 <h4 class="fw-bold text-body mb-0">Panel Pengelola Admin</h4>
                 <p class="text-body-secondary small mb-0">Atur hak akses pengguna, struktur role, dan cadangan data sistem.</p>
-            </div>
-        </div>
-    </div>
-
-    {{-- SIDEBAR OFFCANVAS --}}
-    <div class="offcanvas offcanvas-start border-end shadow" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
-        <div class="offcanvas-header border-bottom py-3">
-            <div class="d-flex align-items-center gap-2">
-                <div class="bg-primary text-white rounded-3 p-1.5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                    <i class="bi bi-shield-lock-fill fs-6"></i>
-                </div>
-                <h5 class="offcanvas-title fw-bold text-body" id="adminSidebarLabel">Menu Navigasi</h5>
-            </div>
-            <button type="button" class="btn-close text-reset shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-
-        <div class="offcanvas-body d-flex flex-column p-3">
-            <div class="mb-3 px-2 py-2 bg-body-tertiary rounded-3 border">
-                <span class="text-uppercase text-body-secondary fw-bold fs-9" style="letter-spacing: .08em;">Pengguna Aktif</span>
-                <div class="fw-bold fs-6 text-truncate text-body">{{ $user->username }}</div>
-            </div>
-
-            <ul class="nav flex-column gap-1 sidebar-nav mb-4">
-                <li class="nav-item">
-                    <a href="{{ route('kategori.index') }}" class="nav-link d-flex align-items-center gap-2">
-                        <i class="bi bi-tags-fill text-primary"></i>
-                        <span>Kelola Kategori Alat</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('alat.index') }}" class="nav-link d-flex align-items-center gap-2">
-                        <i class="bi bi-tools text-warning"></i>
-                        <span>Kelola Inventaris Alat</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('peminjaman.index') }}" class="nav-link d-flex align-items-center gap-2">
-                        <i class="bi bi-box-arrow-up-right text-info"></i>
-                        <span>Daftar Peminjaman</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('pengembalian.index') }}" class="nav-link d-flex align-items-center gap-2">
-                        <i class="bi bi-arrow-return-left text-success"></i>
-                        <span>Daftar Pengembalian</span>
-                    </a>
-                </li>
-            </ul>
-
-            <div class="mt-auto pt-3 border-top px-2">
-                <p class="text-body-secondary small mb-0">
-                    Otorisasi Role: <code class="inline">admin</code>
-                </p>
             </div>
         </div>
     </div>
@@ -220,12 +141,12 @@
     {{-- SEKSI KARTU PINTASAN ADMIN --}}
     <div class="row g-4">
         
-        <!-- Kartu 1: Tambah & Kelola Role -->
+        <!-- Kartu 1: Kelola Role & Akses -->
         <div class="col-md-4">
             <a href="{{ route('admin.roles.index') }}" class="card menu-card text-decoration-none h-100">
                 <div class="card-body p-4">
-                    <div class="menu-icon bg-primary-subtle text-primary">
-                        <i class="bi bi-person-badge-fill"></i>
+                    <div class="menu-icon bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-shield-lock-fill"></i>
                     </div>
                     <h2 class="h6 fw-bold mb-1 text-body">Kelola Role & Akses</h2>
                     <p class="text-body-secondary small mb-0" style="line-height: 1.5;">
@@ -235,11 +156,11 @@
             </a>
         </div>
 
-        <!-- Kartu 2: Manage User -->
+        <!-- Kartu 2: Manajemen Pengguna -->
         <div class="col-md-4">
             <a href="{{ route('admin.users.index') }}" class="card menu-card text-decoration-none h-100">
                 <div class="card-body p-4">
-                    <div class="menu-icon bg-info-subtle text-info">
+                    <div class="menu-icon bg-info bg-opacity-10 text-info">
                         <i class="bi bi-people-fill"></i>
                     </div>
                     <h2 class="h6 fw-bold mb-1 text-body">Manajemen Pengguna</h2>
@@ -250,12 +171,12 @@
             </a>
         </div>
 
-        <!-- Kartu 3: Backup Database -->
+        <!-- Kartu 3: Unduh Database SQL -->
         <div class="col-md-4">
             <a href="{{ route('admin.database.export') }}" class="card menu-card text-decoration-none h-100">
                 <div class="card-body p-4">
-                    <div class="menu-icon bg-success-subtle text-success">
-                        <i class="bi bi-database-fill-down"></i>
+                    <div class="menu-icon bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-database-down"></i>
                     </div>
                     <h2 class="h6 fw-bold mb-1 text-body">Unduh Database SQL</h2>
                     <p class="text-body-secondary small mb-0" style="line-height: 1.5;">

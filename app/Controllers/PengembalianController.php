@@ -146,17 +146,33 @@ class PengembalianController extends Controller
     }
 
     // ==========================================
-    // BAGIAN PEMINJAM: Pengembalian Mandiri
+    // HALAMAN KHUSUS PEMINJAM: Pengembalian Alat
     // ==========================================
 
-    public function storePeminjam(Request $request, $id)
+    public function indexPeminjamPengembalian(Request $request)
+    {
+        $currentUser = User::current();
+        if (!$currentUser) {
+            return redirect(route('login'))->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Ambil peminjaman milik user yang statusnya masih Disetujui atau Dipinjam (belum dikembalikan)
+        $datap = Peminjaman::where('id_user', $currentUser->id)
+            ->whereIn('status', ['Disetujui', 'Dipinjam'])
+            ->orderBy('id_peminjaman', 'desc')
+            ->paginate(5);
+
+        return view('peminjam.pengembalian', compact('datap'));
+    }
+
+    public function storePeminjamPengembalian(Request $request, $id)
     {
         $peminjaman = Peminjaman::where('id_peminjaman', $id)->first();
         if (!$peminjaman) {
-            return redirect(route('peminjam.riwayat'))->with('error', 'Data peminjaman tidak ditemukan.');
+            return redirect(route('peminjam.pengembalian'))->with('error', 'Data peminjaman tidak ditemukan.');
         }
 
-        // Peminjam hanya bisa memilih kondisi barang, denda dihitung otomatis oleh sistem
+        // Peminjam memilih kondisi barang, denda ditentukan otomatis oleh sistem berdasarkan kondisi
         $kondisi = $request->input('kondisi_barang', 'Baik');
         
         $denda = 0;
@@ -173,15 +189,15 @@ class PengembalianController extends Controller
             'terlambat_hari' => 0,
             'denda' => $denda,
             'kondisi_barang' => $kondisi,
-            'catatan' => 'Dikembalikan secara mandiri oleh peminjam.'
+            'catatan' => 'Dikembalikan secara mandiri melalui menu pengembalian.'
         ]);
 
-        // Update status DAN denda di tabel peminjaman agar langsung muncul
+        // Update status dan denda di tabel peminjaman
         $peminjaman->update([
             'status' => 'Dikembalikan',
             'denda' => $denda
         ]);
 
-        return redirect(route('peminjam.riwayat'))->with('success', 'Alat berhasil dikembalikan!');
+        return redirect(route('peminjam.pengembalian'))->with('success', 'Alat berhasil dikembalikan!');
     }
 }

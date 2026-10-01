@@ -136,7 +136,7 @@
                     <!-- Tambahan Menu Pengembalian Alat untuk Peminjam -->
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.riwayat') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
-                            href="{{ route('peminjam.riwayat') }}">
+                            href="{{ route('peminjam.pengembalian') }}">
                             <i class="bi bi-arrow-return-left fs-5"></i>
                             <span class="fw-medium">Pengembalian Alat</span>
                         </a>

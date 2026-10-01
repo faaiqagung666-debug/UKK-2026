@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
         // Arahkan ke nama view yang posisinya ada di luar folder core/petugas
         if ($user->role === 'admin') {
-            return view('admin.dashboard', ['user' => $user]);
+            return view('core.admin.dashboard', ['user' => $user]);
         } 
         elseif ($user->role === 'petugas') {
             return view('petugas.dashboard', ['user' => $user]);
@@ -29,6 +29,6 @@ class DashboardController extends Controller
 
     public function admin()
     {
-        return view('admin.dashboard', ['user' => User::current()]);
+        return view('core.admin.dashboard', ['user' => User::current()]);
     }
 }

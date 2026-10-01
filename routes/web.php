@@ -125,15 +125,17 @@ Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
     Route::get('/daftar-alat', [AlatController::class, 'daftarAlatPeminjam'])->name('peminjam.alat');
 
     // Rute khusus pengguna/peminjam mengajukan peminjaman alat
-    Route::get('/peminjam', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.indexPeminjam');
-    Route::get('/peminjam/ajukan', [PeminjamanController::class, 'createPeminjam'])->name('peminjam.createPeminjam');
-    Route::post('/peminjam/ajukan', [PeminjamanController::class, 'storePeminjam'])->name('peminjam.storePeminjam');
+    Route::get('/peminjaman', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.indexPeminjam');
+    Route::get('/peminjaman/ajukan', [PeminjamanController::class, 'createPeminjam'])->name('peminjam.createPeminjam');
+    Route::post('/peminjaman/ajukan', [PeminjamanController::class, 'storePeminjam'])->name('peminjam.storePeminjam');
     Route::get('/riwayat-peminjaman', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.riwayat');
 
-    // Tambahan Route Pengembalian Mandiri oleh Peminjam
-    Route::post('/kembalikan/{id}', [App\Controllers\PengembalianController::class, 'storePeminjam'])->name('peminjam.kembalikan');
+    // Route Pengembalian Khusus Peminjam (Halaman & Proses)
+    Route::get('/pengembalian', [App\Controllers\PengembalianController::class, 'indexPeminjamPengembalian'])->name('peminjam.pengembalian');
+    Route::post('/pengembalian/{id}', [App\Controllers\PengembalianController::class, 'storePeminjamPengembalian'])->name('peminjam.pengembalian.store');
 });
 // @role:peminjam:end
+
 // @generated-roles:end
 /*
 |--------------------------------------------------------------------------
