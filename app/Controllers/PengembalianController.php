@@ -185,7 +185,7 @@ class PengembalianController extends Controller
         // Simpan ke tabel pengembalian
         Pengembalian::create([
             'id_peminjaman' => $peminjaman->id_peminjaman,
-            'tanggal_pengembalian' => date('Y-m-d'),
+            'tanggal_pengembalian' => date('Y-m-d H:i:s'),
             'terlambat_hari' => 0,
             'denda' => $denda,
             'kondisi_barang' => $kondisi,
