@@ -105,13 +105,13 @@ Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
     // 1. Dashboard Utama Petugas
     Route::get('/', [DashboardController::class, 'index'])->name('petugas.dashboard');
     
-    // 2. Fitur Kendali Peminjaman oleh Petugas (Hanya lihat & setujui/proses)
-    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('petugas.peminjaman.index');
-    Route::get('/peminjaman/{id}/edit', [PeminjamanController::class, 'edit'])->name('petugas.peminjaman.edit');
-    Route::post('/peminjaman/{id}/update', [PeminjamanController::class, 'update'])->name('petugas.peminjaman.update');
+    // 2. Fitur Kendali Peminjaman oleh Petugas
+    Route::get('/peminjaman', [PeminjamanController::class, 'indexPetugas'])->name('petugas.peminjaman.index');
+    Route::put('/peminjaman/{id}/status', [PeminjamanController::class, 'updateStatusPetugas'])->name('petugas.peminjaman.status');
+    Route::get('/peminjaman/cetak', [PeminjamanController::class, 'cetakPetugas'])->name('petugas.peminjaman.cetak');
     
     // 3. Fitur Kendali Pengembalian oleh Petugas
-    Route::get('/pengembalian', [App\Controllers\PengembalianController::class, 'index'])->name('petugas.pengembalian.index');
+    Route::get('/petugas/pengembalian', [App\Controllers\PengembalianController::class, 'indexPetugas'])->name('petugas.pengembalian.index');
     Route::get('/pengembalian/create', [App\Controllers\PengembalianController::class, 'create'])->name('petugas.pengembalian.create');
     Route::post('/pengembalian/store', [App\Controllers\PengembalianController::class, 'store'])->name('petugas.pengembalian.store');
 });
@@ -129,6 +129,9 @@ Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
     Route::get('/peminjam/ajukan', [PeminjamanController::class, 'createPeminjam'])->name('peminjam.createPeminjam');
     Route::post('/peminjam/ajukan', [PeminjamanController::class, 'storePeminjam'])->name('peminjam.storePeminjam');
     Route::get('/riwayat-peminjaman', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.riwayat');
+
+    // Tambahan Route Pengembalian Mandiri oleh Peminjam
+    Route::post('/kembalikan/{id}', [App\Controllers\PengembalianController::class, 'storePeminjam'])->name('peminjam.kembalikan');
 });
 // @role:peminjam:end
 // @generated-roles:end

@@ -11,7 +11,10 @@ use App\Models\alat;
 
 class PengembalianController extends Controller
 {
-    // 1. Tampil Halaman Index (Daftar Pengembalian)
+    // ==========================================
+    // BAGIAN ADMIN: Kelola Semua Pengembalian
+    // ==========================================
+
     public function index(Request $request)
     {
         $datap = Pengembalian::orderBy('id_pengembalian', 'desc')->paginate(10);
@@ -41,7 +44,6 @@ class PengembalianController extends Controller
         return view('pengembalian.index', compact('datap', 'peminjamanList', 'userList', 'alatList'));
     }
 
-    // 2. Tampil Form Tambah Pengembalian
     public function create(Request $request)
     {
         $peminjaman = Peminjaman::where('status', '!=', 'Dikembalikan')->get();
@@ -63,7 +65,6 @@ class PengembalianController extends Controller
         return view('pengembalian.create', compact('peminjaman', 'userList', 'alatList'));
     }
 
-    // 3. Simpan Data Pengembalian Baru
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -81,14 +82,12 @@ class PengembalianController extends Controller
 
         Pengembalian::create($validatedData);
 
-        // Update status di tabel peminjaman menjadi 'Dikembalikan'
         $peminjaman = Peminjaman::findOrFail($validatedData['id_peminjaman']);
         $peminjaman->update(['status' => 'Dikembalikan']);
 
         return redirect(route('pengembalian.index'))->with('success', 'Data pengembalian berhasil ditambahkan.');
     }
 
-    // 4. Tampil Form Edit Pengembalian (Perbaikan Query User & Alat)
     public function edit(Request $request, $id_pengembalian)
     {
         $datap = Pengembalian::findOrFail($id_pengembalian);
@@ -98,10 +97,7 @@ class PengembalianController extends Controller
         $alatName = '-';
 
         if ($peminjaman) {
-            // Ambil User berdasarkan Primary Key
             $user = User::find($peminjaman->id_user);
-
-            // Ambil Alat berdasarkan Primary Key atau id_alat
             $alat = Alat::find($peminjaman->id_alat);
             if (!$alat) {
                 $alat = Alat::where('id_alat', $peminjaman->id_alat)->first();
@@ -114,7 +110,6 @@ class PengembalianController extends Controller
         return view('pengembalian.edit', compact('datap', 'peminjaman', 'peminjamName', 'alatName'));
     }
 
-    // 5. Update Data Pengembalian
     public function update(Request $request, $id_pengembalian)
     {
         $validatedData = $request->validate([
@@ -132,12 +127,61 @@ class PengembalianController extends Controller
         return redirect(route('pengembalian.index'))->with('success', 'Data pengembalian berhasil diubah.');
     }
 
-    // 6. Hapus Data Pengembalian
     public function delete(Request $request, $id_pengembalian)
     {
         $pengembalian = Pengembalian::findOrFail($id_pengembalian);
         $pengembalian->delete();
 
         return redirect(route('pengembalian.index'))->with('success', 'Data pengembalian berhasil dihapus.');
+    }
+
+    // ==========================================
+    // BAGIAN PETUGAS: Hanya Memantau Pengembalian
+    // ==========================================
+
+    public function indexPetugas(Request $request)
+    {
+        $datap = Pengembalian::orderBy('id_pengembalian', 'desc')->paginate(10);
+        return view('petugas.pengembalian.index', compact('datap'));
+    }
+
+    // ==========================================
+    // BAGIAN PEMINJAM: Pengembalian Mandiri
+    // ==========================================
+
+    public function storePeminjam(Request $request, $id)
+    {
+        $peminjaman = Peminjaman::where('id_peminjaman', $id)->first();
+        if (!$peminjaman) {
+            return redirect(route('peminjam.riwayat'))->with('error', 'Data peminjaman tidak ditemukan.');
+        }
+
+        // Peminjam hanya bisa memilih kondisi barang, denda dihitung otomatis oleh sistem
+        $kondisi = $request->input('kondisi_barang', 'Baik');
+        
+        $denda = 0;
+        if ($kondisi == 'Rusak Ringan') {
+            $denda = 10000;
+        } elseif ($kondisi == 'Rusak Berat') {
+            $denda = 50000;
+        }
+        
+        // Simpan ke tabel pengembalian
+        Pengembalian::create([
+            'id_peminjaman' => $peminjaman->id_peminjaman,
+            'tanggal_pengembalian' => date('Y-m-d'),
+            'terlambat_hari' => 0,
+            'denda' => $denda,
+            'kondisi_barang' => $kondisi,
+            'catatan' => 'Dikembalikan secara mandiri oleh peminjam.'
+        ]);
+
+        // Update status DAN denda di tabel peminjaman agar langsung muncul
+        $peminjaman->update([
+            'status' => 'Dikembalikan',
+            'denda' => $denda
+        ]);
+
+        return redirect(route('peminjam.riwayat'))->with('success', 'Alat berhasil dikembalikan!');
     }
 }

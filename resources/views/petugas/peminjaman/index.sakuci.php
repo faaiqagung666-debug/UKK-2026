@@ -1,9 +1,71 @@
 @extends('layouts.app')
 
-@section('title', config('app.name') . ' -- Persetujuan Peminjaman')
+@section('title', config('app.name') . ' -- Kelola Peminjaman Alat')
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    :root {
+        --brand-1: #2563eb;
+        --brand-2: #7c3aed;
+        --hero-bg-light: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 45%),
+                         radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.08), transparent 45%);
+        --hero-bg-dark: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
+                        radial-gradient(circle at 80% 30%, rgba(124, 58, 237, 0.18), transparent 45%);
+    }
+
+    .hero-wrap {
+        position: relative;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        padding: 2.5rem 1.5rem;
+        background: var(--hero-bg-light);
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        transition: background 0.3s ease;
+    }
+
+    .badge-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        color: #fff !important;
+        font-weight: 600;
+        letter-spacing: .03em;
+        box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
+    }
+
+    .text-brand {
+        background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .btn-brand-outline {
+        border: 2px solid var(--brand-1);
+        color: var(--brand-1);
+        font-weight: 600;
+        border-radius: .8rem;
+        background: transparent;
+        transition: all .18s ease;
+    }
+    .btn-brand-outline:hover {
+        background: var(--brand-1);
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .card-brand {
+        border: 1px solid rgba(127, 127, 127, 0.12);
+        border-radius: 1.2rem;
+        background: var(--bs-body-bg);
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    [data-bs-theme="dark"] .hero-wrap {
+        background: var(--hero-bg-dark);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+</style>
 
 <div class="container-fluid py-4 px-4">
     
@@ -18,120 +80,156 @@
         </div>
     @endif
 
+    {{-- Hero Section --}}
+    <section class="text-center hero-wrap mb-4 shadow-sm">
+        <span class="badge rounded-pill badge-brand px-3 py-2 mb-3">
+            <i class="bi bi-shield-check me-1"></i> Panel Petugas
+        </span>
+
+        <h1 class="display-6 fw-bold mb-2 text-body">
+            Kelola <span class="text-brand">Peminjaman Alat</span>
+        </h1>
+
+        <p class="text-body-secondary mx-auto mb-4" style="max-width: 560px;">
+            Setujui atau tolak permohonan peminjaman alat dari peminjam, serta cetak laporan berkala dengan mudah.
+        </p>
+
+        <a href="{{ route('petugas.peminjaman.cetak') }}" target="_blank" class="btn btn-brand-outline px-4 py-2.5 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-printer fs-6"></i>
+            <span>Cetak Laporan Peminjaman</span>
+        </a>
+    </section>
+
     {{-- Card Pembungkus Tabel --}}
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+    <div class="card card-brand shadow-sm overflow-hidden mb-4">
         
         {{-- Header Card --}}
         <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-check2-square text-primary fs-5"></i>
-                <h6 class="fw-bold mb-0 text-body">Verifikasi & Daftar Peminjaman Alat</h6>
+                <i class="bi bi-list-check text-primary fs-5"></i>
+                <h6 class="fw-bold mb-0 text-body">Daftar Permohonan Peminjaman</h6>
             </div>
             <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
                 Total: {{ count($datap) }} Data
             </span>
         </div>
 
-        {{-- Body Tabel --}}
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8">
+                    <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
                         <tr>
                             <th class="py-3 px-4 text-center" style="width: 5%;">No</th>
-                            <th class="py-3 px-3">Peminjam</th>
-                            <th class="py-3 px-3">Nama Alat</th>
+                            <th class="py-3 px-3">ID User</th>
+                            <th class="py-3 px-3">ID Alat</th>
                             <th class="py-3 px-3">Jumlah</th>
                             <th class="py-3 px-3">Tgl Pinjam</th>
                             <th class="py-3 px-3">Tgl Kembali</th>
                             <th class="py-3 px-3">Status</th>
-                            <th class="py-3 px-3">Denda</th>
-                            <th class="py-3 px-4 text-center" style="width: 150px;">Aksi</th>
+                            <th class="py-3 px-4 text-center" style="width: 180px;">Aksi Petugas</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @php $no = 1; @endphp
-                        @forelse ($datap as $peminjaman)
+                    <tbody class="divide-y">
+                        @forelse($datap as $index => $p)
                         <tr>
-                            <td class="px-4 text-center text-body-secondary fw-medium fs-7">{{ $no++ }}</td>
+                            <td class="px-4 text-center text-body-secondary fw-medium fs-7">{{ $index + 1 }}</td>
                             
-                            <!-- Peminjam -->
+                            <!-- ID User -->
                             <td class="px-3">
-                                <span class="fw-bold text-body fs-7">
-                                    {{ $peminjaman->user->nama ?? 'User ID: ' . $peminjaman->id_user }}
+                                <span class="badge bg-body-tertiary text-body border fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                    #{{ $p->id_user }}
                                 </span>
                             </td>
 
-                            <!-- Nama Alat -->
+                            <!-- ID Alat -->
                             <td class="px-3">
-                                <span class="fw-semibold text-body fs-7">
-                                    {{ $peminjaman->alat->nama_alat ?? 'Alat ID: ' . $peminjaman->id_alat }}
+                                <span class="badge bg-body-tertiary text-body border fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                    #{{ $p->id_alat }}
                                 </span>
                             </td>
 
                             <!-- Jumlah -->
                             <td class="px-3">
-                                <span class="badge bg-body-tertiary text-body border fw-semibold px-2 py-1 fs-8">
-                                    {{ $peminjaman->jumlah }} Unit
+                                <span class="text-body fw-semibold fs-7">{{ $p->jumlah }} Unit</span>
+                            </td>
+
+                            <!-- Tanggal Pinjam -->
+                            <td class="px-3">
+                                <span class="text-body fs-7">
+                                    <i class="bi bi-calendar-event text-body-secondary me-1"></i>
+                                    {{ $p->tanggal_pinjam }}
                                 </span>
                             </td>
 
-                            <!-- Tgl Pinjam -->
-                            <td class="px-3 text-body-secondary fs-7">
-                                {{ $peminjaman->tanggal_pinjam }}
-                            </td>
-
-                            <!-- Tgl Kembali -->
-                            <td class="px-3 text-body-secondary fs-7">
-                                {{ $peminjaman->tanggal_kembali ?? '-' }}
+                            <!-- Tanggal Kembali -->
+                            <td class="px-3">
+                                <span class="text-body fs-7">
+                                    <i class="bi bi-calendar-check text-body-secondary me-1"></i>
+                                    {{ $p->tanggal_kembali }}
+                                </span>
                             </td>
 
                             <!-- Status -->
                             <td class="px-3">
-                                @if($peminjaman->status == 'Pending')
-                                    <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 px-2.5 py-1.5 rounded-pill fs-8">
-                                        <i class="bi bi-hourglass-split me-1"></i>Pending
+                                @if($p->status == 'Pending')
+                                    <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
+                                        <i class="bi bi-clock-history me-1"></i>Pending
                                     </span>
-                                @elseif($peminjaman->status == 'Disetujui')
-                                    <span class="badge bg-info-subtle text-info border border-info border-opacity-25 px-2.5 py-1.5 rounded-pill fs-8">
-                                        <i class="bi bi-check2-circle me-1"></i>Disetujui
+                                @elseif($p->status == 'Disetujui')
+                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
+                                        <i class="bi bi-check-circle-fill me-1"></i>Disetujui
                                     </span>
-                                @elseif($peminjaman->status == 'Ditolak')
-                                    <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 px-2.5 py-1.5 rounded-pill fs-8">
-                                        <i class="bi bi-x-circle me-1"></i>Ditolak
+                                @elseif($p->status == 'Ditolak')
+                                    <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
+                                        <i class="bi bi-x-circle-fill me-1"></i>Ditolak
                                     </span>
                                 @else
-                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-25 px-2.5 py-1.5 rounded-pill fs-8">
-                                        <i class="bi bi-check-circle-fill me-1"></i>{{ $peminjaman->status }}
+                                    <span class="badge bg-info-subtle text-info border border-info border-opacity-25 fw-semibold px-2.5 py-1.5 rounded-pill fs-8">
+                                        {{ $p->status }}
                                     </span>
                                 @endif
                             </td>
 
-                            <!-- Denda -->
-                            <td class="px-3">
-                                @if(($peminjaman->denda ?? 0) > 0)
-                                    <span class="text-danger fw-bold fs-7">Rp {{ number_format($peminjaman->denda, 0, ',', '.') }}</span>
-                                @else
-                                    <span class="text-body-secondary fs-7">Rp 0</span>
-                                @endif
-                            </td>
-
-                            <!-- Aksi (Khusus Petugas: Tombol Proses / Verifikasi) -->
+                            <!-- Aksi Petugas -->
                             <td class="px-4 text-center">
-                                <a href="{{ route('petugas.peminjaman.edit', $peminjaman->id_peminjaman ?? $peminjaman->id) }}" class="btn btn-sm btn-outline-primary fw-medium px-3 py-1 rounded-2 fs-7 d-inline-flex align-items-center gap-1">
-                                    <i class="bi bi-pencil-square"></i> Proses
-                                </a>
+                                @if($p->status == 'Pending')
+                                    <div class="d-inline-flex align-items-center justify-content-center gap-1.5">
+                                        <!-- Tombol Setujui -->
+                                        <form action="{{ route('petugas.peminjaman.status', ['id' => $p->id_peminjaman]) }}" method="POST" class="d-inline m-0">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status" value="Disetujui">
+                                            <button type="submit" class="btn btn-sm btn-success fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7" title="Setujui Peminjaman">
+                                                <i class="bi bi-check-lg"></i> Setujui
+                                            </button>
+                                        </form>
+                                        
+                                        <!-- Tombol Tolak -->
+                                        <form action="{{ route('petugas.peminjaman.status', ['id' => $p->id_peminjaman]) }}" method="POST" class="d-inline m-0">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status" value="Ditolak">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger fw-medium px-2.5 py-1 rounded-2 d-inline-flex align-items-center gap-1 fs-7" onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')" title="Tolak Peminjaman">
+                                                <i class="bi bi-x-lg"></i> Tolak
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <span class="badge bg-body-tertiary text-body-secondary border px-2.5 py-1 rounded-2 fs-8 fw-normal">
+                                        Selesai ({{ $p->status }})
+                                    </span>
+                                @endif
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="9" class="text-center py-5 text-body-secondary">
+                            <td colspan="8" class="text-center py-5 text-body-secondary">
                                 <div class="d-flex flex-column align-items-center gap-2">
                                     <div class="bg-body-tertiary rounded-circle p-3 mb-1">
-                                        <i class="bi bi-inbox text-body-secondary fs-2 opacity-50"></i>
+                                        <i class="bi bi-folder2-open text-body-secondary fs-2 opacity-50"></i>
                                     </div>
                                     <h6 class="fw-bold mb-0 text-body">Belum Ada Data Peminjaman</h6>
-                                    <span class="fs-7 text-body-secondary">Permohonan peminjaman dari siswa akan muncul di sini.</span>
+                                    <span class="fs-7 text-body-secondary">Permohonan peminjaman alat yang masuk akan muncul di sini.</span>
                                 </div>
                             </td>
                         </tr>
@@ -140,7 +238,7 @@
                 </table>
             </div>
         </div>
-
     </div>
+
 </div>
 @endsection

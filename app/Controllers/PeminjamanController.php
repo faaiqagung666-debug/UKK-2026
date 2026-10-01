@@ -93,6 +93,40 @@ class PeminjamanController
 
 
     // ==========================================
+    // BAGIAN PETUGAS: Setujui & Pantau Peminjaman
+    // ==========================================
+
+    // Menampilkan daftar peminjaman khusus untuk Petugas
+    public function indexPetugas(Request $request)
+    {
+        $datap = Peminjaman::orderBy('id_peminjaman', 'desc')->paginate(10);
+        return view('petugas.peminjaman.index', compact('datap'));
+    }
+
+    // Proses mengubah status peminjaman (Disetujui atau Ditolak) oleh Petugas
+    public function updateStatusPetugas(Request $request, $id)
+    {
+        $peminjaman = Peminjaman::where('id_peminjaman', $id)->first();
+        if (!$peminjaman) {
+            return redirect(route('petugas.peminjaman.index'))->with('error', 'Data peminjaman tidak ditemukan.');
+        }
+
+        // Mengubah status sesuai input form (Disetujui / Ditolak)
+        $peminjaman->status = $request->input('status');
+        $peminjaman->save();
+
+        return redirect(route('petugas.peminjaman.index'))->with('success', 'Status peminjaman berhasil diperbarui!');
+    }
+
+    // Menampilkan halaman cetak laporan khusus Petugas
+    public function cetakPetugas(Request $request)
+    {
+        $datap = Peminjaman::orderBy('id_peminjaman', 'desc')->get();
+        return view('petugas.peminjaman.cetak', compact('datap'));
+    }
+
+
+    // ==========================================
     // BAGIAN PEMINJAM / SISWA: Pengajuan Mandiri
     // ==========================================
 

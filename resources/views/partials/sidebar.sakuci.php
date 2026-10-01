@@ -8,7 +8,6 @@
     }
     $currentUser = \App\Models\User::current();
     
-    // Tentukan prefix/role rute aktif berdasarkan role user
     $rolePrefix = '';
     if ($currentUser) {
         if ($currentUser->role === 'admin') {
@@ -21,10 +20,9 @@
     }
 @endphp
 
-<!-- OFFCANVAS SIDEBAR (Bisa dibuka & ditutup di semua layar) -->
+<!-- OFFCANVAS SIDEBAR -->
 <div class="offcanvas offcanvas-start bg-body-tertiary border-end shadow" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 280px;">
     
-    <!-- Header Sidebar (Judul & Tombol Silang Tutup) -->
     <div class="offcanvas-header border-bottom px-4 py-3">
         <div class="d-flex align-items-center gap-2">
             <div class="bg-primary text-white rounded-3 p-1.5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
@@ -37,14 +35,12 @@
         <button type="button" class="btn-close text-reset shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
-    <!-- Body Sidebar (Menu Navigasi Utama) -->
     <div class="offcanvas-body p-3 d-flex flex-column">
         <div class="text-uppercase text-body-tertiary fw-bold fs-9 tracking-wider mb-2 px-2">
             Menu Navigasi
         </div>
 
         <ul class="nav nav-pills flex-column mb-auto gap-1">
-            <!-- Link Beranda -->
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('home') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" href="{{ route('home') }}">
                     <i class="bi bi-house-door fs-5"></i>
@@ -53,7 +49,6 @@
             </li>
 
             @if ($currentUser)
-                <!-- Link Dashboard -->
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('admin.dashboard', 'dashboard', 'petugas.dashboard', 'peminjam.dashboard') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}"
                         href="{{ 
@@ -104,7 +99,7 @@
                     </li>
                 @endif
 
-                {{-- MENU KHUSUS PETUGAS (Sesuai Aturan UKK: Menyetujui & Memantau Pengembalian) --}}
+                {{-- MENU KHUSUS PETUGAS --}}
                 @if ($currentUser->role === 'petugas')
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('petugas.peminjaman.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
@@ -122,7 +117,7 @@
                     </li>
                 @endif
 
-                {{-- MENU KHUSUS PEMINJAM --}}
+                {{-- MENU KHUSUS PEMINJAM (Siswa) --}}
                 @if ($currentUser->role === 'peminjam')
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.alat') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
@@ -138,13 +133,20 @@
                             <span class="fw-medium">Riwayat Peminjaman</span>
                         </a>
                     </li>
+                    <!-- Tambahan Menu Pengembalian Alat untuk Peminjam -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.riwayat') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('peminjam.riwayat') }}">
+                            <i class="bi bi-arrow-return-left fs-5"></i>
+                            <span class="fw-medium">Pengembalian Alat</span>
+                        </a>
+                    </li>
                 @endif
             @endif
         </ul>
 
         <hr class="opacity-25 my-3">
 
-        <!-- Footer Sidebar (Detail Akun / Logout) -->
         <div class="mt-auto">
             @if ($currentUser)
                 <div class="bg-body-secondary rounded-3 p-3 mb-2 d-flex flex-column gap-1">
