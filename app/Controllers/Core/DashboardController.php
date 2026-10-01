@@ -9,11 +9,26 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('core.dashboard', ['user' => User::current()]);
+        $user = User::current();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Arahkan ke nama view yang posisinya ada di luar folder core/petugas
+        if ($user->role === 'admin') {
+            return view('admin.dashboard', ['user' => $user]);
+        } 
+        elseif ($user->role === 'petugas') {
+            return view('petugas.dashboard', ['user' => $user]);
+        } 
+        else {
+            return view('peminjam.dashboard', ['user' => $user]);
+        }
     }
 
     public function admin()
     {
-        return view('core.admin.dashboard', ['user' => User::current()]);
+        return view('admin.dashboard', ['user' => User::current()]);
     }
 }

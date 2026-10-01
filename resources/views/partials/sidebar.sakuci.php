@@ -37,7 +37,6 @@
         <button type="button" class="btn-close text-reset shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
-
     <!-- Body Sidebar (Menu Navigasi Utama) -->
     <div class="offcanvas-body p-3 d-flex flex-column">
         <div class="text-uppercase text-body-tertiary fw-bold fs-9 tracking-wider mb-2 px-2">
@@ -66,10 +65,8 @@
                     </a>
                 </li>
 
-                {{-- MENU KHUSUS ADMIN & PETUGAS --}}
-                @if (in_array($currentUser->role, ['admin', 'petugas']))
-                    <!-- Link Data Alat (Admin) -->
-                    @if($currentUser->role === 'admin')
+                {{-- MENU KHUSUS ADMIN --}}
+                @if ($currentUser->role === 'admin')
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('alat.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
                             href="{{ route('alat.index') }}">
@@ -84,28 +81,20 @@
                             <span class="fw-medium">Kategori Alat</span>
                         </a>
                     </li>
-                    @endif
-
-                    <!-- Link Peminjaman -->
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjaman.index', 'petugas.peminjaman.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
-                            href="{{ route($currentUser->role === 'admin' ? 'peminjaman.index' : 'petugas.peminjaman.index') }}">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjaman.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('peminjaman.index') }}">
                             <i class="bi bi-box-arrow-up-right fs-5"></i>
                             <span class="fw-medium">Peminjaman Alat</span>
                         </a>
                     </li>
-
-                    <!-- Link Pengembalian -->
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('pengembalian.index', 'petugas.pengembalian.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
-                            href="{{ route($currentUser->role === 'admin' ? 'pengembalian.index' : 'petugas.pengembalian.index') }}">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('pengembalian.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('pengembalian.index') }}">
                             <i class="bi bi-arrow-return-left fs-5"></i>
                             <span class="fw-medium">Pengembalian Alat</span>
                         </a>
                     </li>
-
-                    <!-- Link Log Aktivitas (Khusus Admin) -->
-                    @if($currentUser->role === 'admin')
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('admin.logs.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
                             href="{{ route('admin.logs.index') }}">
@@ -113,12 +102,28 @@
                             <span class="fw-medium">Log Aktivitas</span>
                         </a>
                     </li>
-                    @endif
+                @endif
+
+                {{-- MENU KHUSUS PETUGAS (Sesuai Aturan UKK: Menyetujui & Memantau Pengembalian) --}}
+                @if ($currentUser->role === 'petugas')
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('petugas.peminjaman.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('petugas.peminjaman.index') }}">
+                            <i class="bi bi-check2-square fs-5"></i>
+                            <span class="fw-medium">Persetujuan Peminjaman</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('petugas.pengembalian.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('petugas.pengembalian.index') }}">
+                            <i class="bi bi-arrow-return-left fs-5"></i>
+                            <span class="fw-medium">Pantau Pengembalian</span>
+                        </a>
+                    </li>
                 @endif
 
                 {{-- MENU KHUSUS PEMINJAM --}}
                 @if ($currentUser->role === 'peminjam')
-                    <!-- Link Katalog Alat -->
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.alat') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
                             href="{{ route('peminjam.alat') }}">
@@ -126,8 +131,6 @@
                             <span class="fw-medium">Katalog Alat</span>
                         </a>
                     </li>
-
-                    <!-- Link Riwayat / Pengajuan Peminjaman -->
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('peminjam.riwayat', 'peminjam.indexPeminjam') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
                             href="{{ route('peminjam.riwayat') }}">

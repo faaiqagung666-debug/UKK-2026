@@ -105,7 +105,7 @@ Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
     // 1. Dashboard Utama Petugas
     Route::get('/', [DashboardController::class, 'index'])->name('petugas.dashboard');
     
-    // 2. Fitur Kendali Peminjaman oleh Petugas
+    // 2. Fitur Kendali Peminjaman oleh Petugas (Hanya lihat & setujui/proses)
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('petugas.peminjaman.index');
     Route::get('/peminjaman/{id}/edit', [PeminjamanController::class, 'edit'])->name('petugas.peminjaman.edit');
     Route::post('/peminjaman/{id}/update', [PeminjamanController::class, 'update'])->name('petugas.peminjaman.update');
@@ -114,8 +114,6 @@ Route::group(['prefix' => 'petugas', 'middleware' => 'petugas'], function () {
     Route::get('/pengembalian', [App\Controllers\PengembalianController::class, 'index'])->name('petugas.pengembalian.index');
     Route::get('/pengembalian/create', [App\Controllers\PengembalianController::class, 'create'])->name('petugas.pengembalian.create');
     Route::post('/pengembalian/store', [App\Controllers\PengembalianController::class, 'store'])->name('petugas.pengembalian.store');
-    Route::get('/pengembalian/{id}/edit', [App\Controllers\PengembalianController::class, 'edit'])->name('petugas.pengembalian.edit');
-    Route::post('/pengembalian/{id}/update', [App\Controllers\PengembalianController::class, 'update'])->name('petugas.pengembalian.update');
 });
 // @role:petugas:end
 
