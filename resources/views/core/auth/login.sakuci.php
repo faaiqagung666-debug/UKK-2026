@@ -192,11 +192,6 @@
                         Masuk
                     </h1>
 
-                    <p class="text-secondary small mb-4 login-subtitle">
-                        Akun demo: admin &mdash; password
-                        <code class="inline">rahasia123</code>
-                    </p>
-
                     <form method="POST" action="{{ route('login.attempt') }}">
                         @csrf
 
