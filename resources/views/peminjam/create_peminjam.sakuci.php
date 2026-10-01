@@ -254,12 +254,13 @@
 
                 <div class="card-body pengajuan-body">
 
-                    {{-- Tentukan rute action berdasarkan role yang sedang login --}}
+                    {{-- =========================================================
+                        ROUTE FORM PEMINJAMAN
+                        Menggunakan route yang memang terdaftar di routes.php
+                    ========================================================== --}}
                     @php
-                        $currentUser = \App\Models\User::current();
-                        $isPengguna = $currentUser && ($currentUser->role == 'pengguna');
-                        $storeRoute = $isPengguna ? route('peminjam.storePeminjam.pengguna') : route('peminjam.storePeminjam');
-                        $indexRoute = $isPengguna ? route('peminjam.indexPeminjam.pengguna') : route('peminjam.indexPeminjam');
+                        $storeRoute = route('peminjam.storePeminjam');
+                        $indexRoute = route('peminjam.indexPeminjam');
                     @endphp
 
                     <form action="{{ $storeRoute }}" method="POST">
@@ -267,19 +268,30 @@
 
                         <div class="form-section">
 
-                            <!-- Pilihan Alat -->
+                            {{-- Pilihan Alat --}}
                             <div class="mb-3">
                                 <label for="id_alat" class="form-label fw-semibold">
                                     <i class="bi bi-tools me-1 text-success"></i>
                                     Pilih Alat
                                 </label>
 
-                                <select name="id_alat" id="id_alat" class="form-select" required>
-                                    <option value="">-- Pilih Alat Inventaris --</option>
+                                <select
+                                    name="id_alat"
+                                    id="id_alat"
+                                    class="form-select"
+                                    required
+                                >
+                                    <option value="">
+                                        -- Pilih Alat Inventaris --
+                                    </option>
 
                                     @foreach($alat as $item)
-                                        <option value="{{ $item->id_alat }}" {{ (isset($selectedAlatId) && $selectedAlatId == $item->id_alat) ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $item->id_alat }}"
+                                            {{ (isset($selectedAlatId) && $selectedAlatId == $item->id_alat) ? 'selected' : '' }}
+                                        >
                                             {{ $item->nama_alat ?? $item->nama }}
+
                                             @if(isset($item->stok))
                                                 (Stok: {{ $item->stok }})
                                             @endif
@@ -288,7 +300,7 @@
                                 </select>
                             </div>
 
-                            <!-- Jumlah -->
+                            {{-- Jumlah --}}
                             <div class="mb-3">
                                 <label for="jumlah" class="form-label fw-semibold">
                                     <i class="bi bi-123 me-1 text-success"></i>
@@ -306,7 +318,7 @@
                                 >
                             </div>
 
-                            <!-- Tanggal Pinjam -->
+                            {{-- Tanggal Pinjam --}}
                             <div class="mb-3">
                                 <label for="tanggal_pinjam" class="form-label fw-semibold">
                                     <i class="bi bi-calendar-event me-1 text-success"></i>
@@ -322,12 +334,14 @@
                                 >
                             </div>
 
-                            <!-- Tanggal Kembali -->
+                            {{-- Tanggal Kembali --}}
                             <div class="mb-4">
                                 <label for="tanggal_kembali" class="form-label fw-semibold">
                                     <i class="bi bi-calendar-check me-1 text-success"></i>
                                     Rencana Tanggal Kembali
-                                    <span class="text-muted fw-normal">(Opsional)</span>
+                                    <span class="text-muted fw-normal">
+                                        (Opsional)
+                                    </span>
                                 </label>
 
                                 <input
@@ -340,15 +354,21 @@
 
                         </div>
 
-                        <!-- Tombol Aksi -->
+                        {{-- Tombol Aksi --}}
                         <div class="d-flex justify-content-between align-items-center action-area">
 
-                            <a href="{{ $indexRoute }}" class="btn btn-outline-brand px-3">
+                            <a
+                                href="{{ $indexRoute }}"
+                                class="btn btn-outline-brand px-3"
+                            >
                                 <i class="bi bi-arrow-left me-1"></i>
                                 Batal
                             </a>
 
-                            <button type="submit" class="btn btn-brand px-4 shadow-sm">
+                            <button
+                                type="submit"
+                                class="btn btn-brand px-4 shadow-sm"
+                            >
                                 <i class="bi bi-send me-1"></i>
                                 Kirim Pengajuan
                             </button>
@@ -356,6 +376,7 @@
                         </div>
 
                     </form>
+
                 </div>
             </div>
         </div>

@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cetak Laporan Peminjaman</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <style>
         :root {
@@ -54,9 +57,14 @@
             margin: .75rem auto 0;
         }
 
+        /* =========================
+           TABEL LAPORAN
+        ========================= */
+
         .table {
             border-color: rgba(13, 122, 80, 0.2);
             margin-bottom: 0;
+            background: #fff;
         }
 
         .table thead th {
@@ -70,18 +78,37 @@
             white-space: nowrap;
         }
 
+        .table tbody {
+            background: #fff;
+        }
+
+        .table tbody tr {
+            background: #fff !important;
+        }
+
+        .table tbody tr:nth-child(even),
+        .table tbody tr:nth-child(odd) {
+            background: #fff !important;
+        }
+
         .table tbody td {
             vertical-align: middle;
             font-size: .85rem;
-        }
-
-        .table tbody tr:nth-child(even) {
-            background: rgba(13, 122, 80, 0.035);
+            background: #fff !important;
+            color: #1f2937;
         }
 
         .table tbody tr:hover {
-            background: rgba(13, 122, 80, 0.08);
+            background: #fff !important;
         }
+
+        .table tbody tr:hover td {
+            background: #fff !important;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
 
         .status {
             display: inline-block;
@@ -94,6 +121,10 @@
             border: 1px solid rgba(13, 122, 80, 0.18);
         }
 
+        /* =========================
+           FOOTER
+        ========================= */
+
         .report-footer {
             margin-top: 1.5rem;
             padding-top: .75rem;
@@ -103,7 +134,12 @@
             font-size: .8rem;
         }
 
+        /* =========================
+           PRINT
+        ========================= */
+
         @media print {
+
             @page {
                 size: landscape;
                 margin: 12mm;
@@ -111,7 +147,7 @@
 
             body {
                 background: #fff !important;
-                color: #000;
+                color: #000 !important;
             }
 
             .container {
@@ -122,6 +158,7 @@
             }
 
             .report-wrapper {
+                background: #fff !important;
                 border: none;
                 border-radius: 0;
                 box-shadow: none;
@@ -133,7 +170,9 @@
             }
 
             .table {
+                width: 100% !important;
                 page-break-inside: auto;
+                background: #fff !important;
             }
 
             .table tr {
@@ -145,22 +184,38 @@
                 display: table-header-group;
             }
 
+            /* Header tabel tetap hijau */
             .table thead th {
                 background: var(--brand-2) !important;
                 color: #fff !important;
+                border-color: var(--brand-2) !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
-            .table tbody tr:nth-child(even) {
-                background: rgba(13, 122, 80, 0.035) !important;
+            /* Semua baris data putih */
+            .table tbody,
+            .table tbody tr,
+            .table tbody tr:nth-child(even),
+            .table tbody tr:nth-child(odd),
+            .table tbody td {
+                background: #fff !important;
+                color: #000 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
+            /* Hilangkan efek hover ketika print */
+            .table tbody tr:hover,
+            .table tbody tr:hover td {
+                background: #fff !important;
+            }
+
+            /* Status tetap memiliki aksen hijau */
             .status {
                 color: var(--brand-1) !important;
                 background: rgba(13, 122, 80, 0.08) !important;
+                border: 1px solid rgba(13, 122, 80, 0.18) !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -171,71 +226,113 @@
 <body onload="window.print()">
 
     <div class="container mt-4">
+
         <div class="report-wrapper">
 
             {{-- Header Laporan --}}
             <div class="report-header text-center">
-                <h3 class="report-title">Laporan Peminjaman Alat</h3>
+
+                <h3 class="report-title">
+                    Laporan Peminjaman Alat
+                </h3>
 
                 <p class="report-subtitle">
                     Sistem Informasi Peminjaman Alat
                 </p>
 
                 <div class="accent-line"></div>
+
             </div>
+
 
             {{-- Tabel Laporan --}}
             <div class="table-responsive">
+
                 <table class="table table-bordered align-middle">
+
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>ID User</th>
-                            <th>ID Alat</th>
-                            <th>Jumlah</th>
-                            <th>Tanggal Pinjam</th>
-                            <th>Tanggal Kembali</th>
-                            <th>Status</th>
+
+                            <th>
+                                No
+                            </th>
+
+                            <th>
+                                ID User
+                            </th>
+
+                            <th>
+                                ID Alat
+                            </th>
+
+                            <th>
+                                Jumlah
+                            </th>
+
+                            <th>
+                                Tanggal Pinjam
+                            </th>
+
+                            <th>
+                                Tanggal Kembali
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
                         </tr>
                     </thead>
 
+
                     <tbody>
+
                         @foreach($datap as $index => $p)
-                        <tr>
-                            <td class="text-center">
-                                {{ $index + 1 }}
-                            </td>
 
-                            <td class="text-center">
-                                {{ $p->id_user }}
-                            </td>
+                            <tr>
 
-                            <td class="text-center">
-                                {{ $p->id_alat }}
-                            </td>
+                                <td class="text-center">
+                                    {{ $index + 1 }}
+                                </td>
 
-                            <td class="text-center">
-                                {{ $p->jumlah }}
-                            </td>
+                                <td class="text-center">
+                                    {{ $p->id_user }}
+                                </td>
 
-                            <td>
-                                {{ $p->tanggal_pinjam }}
-                            </td>
+                                <td class="text-center">
+                                    {{ $p->id_alat }}
+                                </td>
 
-                            <td>
-                                {{ $p->tanggal_kembali }}
-                            </td>
+                                <td class="text-center">
+                                    {{ $p->jumlah }}
+                                </td>
 
-                            <td class="text-center">
-                                <span class="status">
-                                    {{ $p->status }}
-                                </span>
-                            </td>
-                        </tr>
+                                <td>
+                                    {{ $p->tanggal_pinjam }}
+                                </td>
+
+                                <td>
+                                    {{ $p->tanggal_kembali }}
+                                </td>
+
+                                <td class="text-center">
+
+                                    <span class="status">
+                                        {{ $p->status }}
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
                         @endforeach
+
                     </tbody>
+
                 </table>
+
             </div>
+
 
             {{-- Footer --}}
             <div class="report-footer">
@@ -243,6 +340,7 @@
             </div>
 
         </div>
+
     </div>
 
 </body>
