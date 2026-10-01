@@ -7,6 +7,7 @@ use App\Models\User;
 use Sakuci\Controller;
 use Sakuci\Http\Request;
 use Sakuci\Session;
+use App\Models\ActivityLog;
 
 class AuthController extends Controller
 {
@@ -48,6 +49,13 @@ class AuthController extends Controller
 
         Session::put('user_id', $user->id);
 
+        // Catat aktivitas registrasi/masuk pertama kali
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Melakukan pendaftaran akun baru dan masuk ke sistem',
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null
+        ]);
+
         return redirect('/dashboard')->with('success', 'Pendaftaran berhasil. Selamat datang, ' . $user->username . '.');
     }
 
@@ -68,15 +76,33 @@ class AuthController extends Controller
 
         Session::put('user_id', $user->id);
 
+        // --- CATAT AKTIVITAS LOGIN DI SINI ---
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Berhasil masuk (login) ke dalam sistem',
+            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null
+        ]);
+        // -------------------------------------
+
         return redirect($user->role === 'admin' ? '/admin' : '/dashboard')
             ->with('success', 'Selamat datang, ' . $user->username . '.');
     }
 
     public function logout()
     {
+        $userId = Session::get('user_id');
+
+        if ($userId) {
+            // Catat aktivitas logout sebelum sesi dihapus
+            ActivityLog::create([
+                'user_id' => $userId,
+                'activity' => 'Keluar (logout) dari sistem',
+                'ip_address' => $_SERVER['REMOTE_ADDR'] ?? null
+            ]);
+        }
+
         Session::forget('user_id');
 
         return redirect('/login')->with('success', 'Berhasil logout.');
     }
 }
-

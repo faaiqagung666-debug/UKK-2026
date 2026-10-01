@@ -9,7 +9,7 @@ use App\Controllers\Core\UserController;
 use App\Controllers\KategoriController;
 use App\Controllers\alatController;
 use App\Controllers\PeminjamanController;
-
+use App\Controllers\ActivityLogController;
 use Sakuci\Route;
 
 /*
@@ -40,6 +40,7 @@ Route::get('/docs', [DocsController::class, 'index'])->name('docs');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->name('login.attempt')->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::get('/logs', [ActivityLogController::class, 'index'])->name('admin.logs.index');
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register')->middleware('guest');
 Route::post('/register', [AuthController::class, 'register'])->name('register.attempt')->middleware('guest');

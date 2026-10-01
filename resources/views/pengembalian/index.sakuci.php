@@ -64,7 +64,6 @@
         transition: background 0.3s ease, border-color 0.3s ease;
     }
 
-    /* Support Dark Mode Otomatis */
     [data-bs-theme="dark"] .hero-wrap {
         background: var(--hero-bg-dark);
         border-color: rgba(255, 255, 255, 0.08);
@@ -114,7 +113,7 @@
                 <h6 class="fw-bold mb-0 text-body">Data Transaksi Pengembalian</h6>
             </div>
             <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
-                Total: {{ $data->total() }} Data
+                Total: {{ $datap->total() }} Data
             </span>
         </div>
 
@@ -135,7 +134,7 @@
                     </thead>
                     <tbody class="divide-y">
                         @php $no = 1; @endphp
-                        @forelse ($data as $pengembalian)
+                        @forelse ($datap as $pengembalian)
                         <tr>
                             <td class="px-4 text-center text-body-secondary fw-medium fs-7">{{ $no++ }}</td>
                             
@@ -239,9 +238,9 @@
         </div>
         
         {{-- Bagian Pagination --}}
-        @if($data->hasPages())
+        @if($datap->hasPages())
         <div class="card-footer bg-transparent py-3 border-top d-flex justify-content-end">
-            {!! $data->links() !!}
+            {!! $datap->links() !!}
         </div>
         @endif
     </div>

@@ -37,6 +37,7 @@
         <button type="button" class="btn-close text-reset shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
+
     <!-- Body Sidebar (Menu Navigasi Utama) -->
     <div class="offcanvas-body p-3 d-flex flex-column">
         <div class="text-uppercase text-body-tertiary fw-bold fs-9 tracking-wider mb-2 px-2">
@@ -102,6 +103,17 @@
                             <span class="fw-medium">Pengembalian Alat</span>
                         </a>
                     </li>
+
+                    <!-- Link Log Aktivitas (Khusus Admin) -->
+                    @if($currentUser->role === 'admin')
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-3 px-3 py-2.5 rounded-3 {{ is_route('admin.logs.index') ? 'active bg-primary text-white' : 'text-body hover-bg-body-secondary' }}" 
+                            href="{{ route('admin.logs.index') }}">
+                            <i class="bi bi-clock-history fs-5"></i>
+                            <span class="fw-medium">Log Aktivitas</span>
+                        </a>
+                    </li>
+                    @endif
                 @endif
 
                 {{-- MENU KHUSUS PEMINJAM --}}
