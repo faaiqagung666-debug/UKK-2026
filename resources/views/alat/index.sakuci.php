@@ -451,7 +451,7 @@
             class="mx-auto mb-4"
             style="max-width: 560px;"
         >
-            Kelola data barang dan perangkat kebutuhan olhragamu —
+            Kelola data barang dan perangkat kebutuhan olahragamu —
             tambah baru, perbarui data, atau hapus item sesuai kebutuhan.
         </p>
 
