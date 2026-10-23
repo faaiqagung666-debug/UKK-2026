@@ -355,7 +355,7 @@
                                 class="btn btn-brand d-inline-flex align-items-center gap-2"
                             >
                                 <i class="bi bi-check-circle-fill"></i>
-                                <span>Simpan Alat</span>
+                                <span>Simpan</span>
                             </button>
 
                         </div>
