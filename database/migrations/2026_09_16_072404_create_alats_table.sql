@@ -1,5 +1,3 @@
--- create_alats_table
-
 CREATE TABLE IF NOT EXISTS `alat` (
     id_alat        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nama_alat      VARCHAR(255) NOT NULL,

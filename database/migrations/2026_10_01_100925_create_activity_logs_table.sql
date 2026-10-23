@@ -1,5 +1,3 @@
--- create_activity_logs_table
-
 CREATE TABLE IF NOT EXISTS `activity_logs` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,

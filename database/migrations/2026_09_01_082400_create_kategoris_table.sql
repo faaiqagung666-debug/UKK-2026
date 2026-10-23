@@ -1,5 +1,3 @@
--- create_kategoris_table
-
 CREATE TABLE IF NOT EXISTS `kategori` (
     id_kategori         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     kode_kategori  VARCHAR(10) NOT NULL,
