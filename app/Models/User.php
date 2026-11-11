@@ -9,26 +9,23 @@ class User extends Model
 {
     protected static ?string $table = 'users';
 
-    // Kolom yang boleh diisi lewat create()/update()
+    protected string $primaryKey = 'id'; // Sesuaikan jika primary key tabel users Anda berbeda (misal 'id_user')
+
+    // Tambahkan 'nama' (atau kolom nama yang ada di database Anda)
     protected array $fillable = [
+        'nama',
         'username',
         'password',
         'role'
     ];
 
-    // Password tidak boleh tampil saat di-convert ke array/JSON
     protected array $hidden = ['password'];
 
-    /** Cek apakah user punya salah satu role yang diberikan. */
     public function hasRole(string ...$roles): bool
     {
         return in_array($this->role, $roles, true);
     }
 
-    /**
-     * User yang sedang login pada request ini (null bila belum login).
-     * Hasil di-cache supaya query hanya jalan sekali per request.
-     */
     public static function current(): ?static
     {
         static $user = null;
@@ -45,4 +42,3 @@ class User extends Model
         return $user;
     }
 }
-

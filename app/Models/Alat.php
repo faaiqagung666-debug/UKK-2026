@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use Sakuci\Database\Model;
 
-class alat extends Model
+class Alat extends Model // <-- Wajib 'Alat' (A besar)
 {
     protected static ?string $table = 'alat';
     protected string $primaryKey = 'id_alat';

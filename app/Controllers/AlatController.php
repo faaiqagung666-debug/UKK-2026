@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Sakuci\Controller;
 use Sakuci\Http\Request;
-use App\Models\alat;
+use App\Models\Alat;
 use App\Models\Kategori;
 
 class AlatController extends Controller

@@ -7,7 +7,7 @@ use App\Controllers\Core\DocsController;
 use App\Controllers\Core\RoleController;
 use App\Controllers\Core\UserController;
 use App\Controllers\KategoriController;
-use App\Controllers\alatController;
+use App\Controllers\AlatController;
 use App\Controllers\PeminjamanController;
 use App\Controllers\ActivityLogController;
 use Sakuci\Route;
@@ -67,12 +67,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::put('/kategori/{id_kategori}',[App\Controllers\KategoriController::class, 'update'])->name('kategori.update');
     Route::delete('/kategori/{id_kategori}',[App\Controllers\KategoriController::class, 'destroy'])->name('kategori.destroy');
 
-    Route::get('/alat', [alatController::class, 'index'])->name('alat.index');
-    Route::get('/alat/create', [alatController::class, 'create'])->name('alat.create');
-    Route::post('/alat/store', [alatController::class, 'store'])->name('alat.store');
-    Route::get('/alat/{id_alat}/edit', [alatController::class, 'edit'] )->name('alat.edit');
-    Route::put('/alat/{id_alat}', [alatController::class, 'update'] )->name('alat.update');
-    Route::delete('/alat/{id_alat}', [alatController::class, 'delete'] )->name('alat.delete');
+    Route::get('/alat', [AlatController::class, 'index'])->name('alat.index');
+    Route::get('/alat/create', [AlatController::class, 'create'])->name('alat.create');
+    Route::post('/alat/store', [AlatController::class, 'store'])->name('alat.store');
+    Route::get('/alat/{id_alat}/edit', [AlatController::class, 'edit'] )->name('alat.edit');
+    Route::put('/alat/{id_alat}', [AlatController::class, 'update'] )->name('alat.update');
+    Route::delete('/alat/{id_alat}', [AlatController::class, 'delete'] )->name('alat.delete');
 
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
     Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');

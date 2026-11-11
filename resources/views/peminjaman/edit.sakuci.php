@@ -237,8 +237,8 @@
                     >
                         @foreach($users as $user)
                             <option
-                                value="{{ $user->id_user }}"
-                                {{ $data->id_user == $user->id_user ? 'selected' : '' }}
+                                value="{{ $user->id }}"
+                                {{ $data->id_user == $user->id ? 'selected' : '' }}
                             >
                                 {{ $user->username }}
                             </option>
@@ -309,6 +309,10 @@
 
                             <option value="Ditolak" {{ $data->status == 'Ditolak' ? 'selected' : '' }}>
                                 Ditolak
+                            </option>
+
+                            <option value="Dipinjam" {{ $data->status == 'Dipinjam' ? 'selected' : '' }}>
+                                Dipinjam
                             </option>
 
                             <option value="Dikembalikan" {{ $data->status == 'Dikembalikan' ? 'selected' : '' }}>

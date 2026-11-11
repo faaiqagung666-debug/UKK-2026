@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Peminjaman;
-use App\Models\alat;
+use App\Models\Alat;
 use App\Models\User;
 use Sakuci\Http\Request;
 
@@ -13,14 +13,13 @@ class PeminjamanController
     // BAGIAN ADMIN: Kelola Semua Peminjaman
     // ==========================================
 
-    // Menampilkan semua daftar peminjaman untuk admin
     public function index(Request $request)
     {
-        $datap = Peminjaman::orderBy('id_peminjaman', 'desc')->paginate(4);
+        // Wajib menggunakan with(['user', 'alat']) agar data relasinya ikut dimuat
+        $datap = Peminjaman::with(['user', 'alat'])->orderBy('id_peminjaman', 'desc')->paginate(4);
         return view('peminjaman.index', compact('datap'));
     }
 
-    // Form tambah peminjaman oleh admin
     public function create(Request $request)
     {
         $alat = Alat::all();
@@ -28,12 +27,10 @@ class PeminjamanController
         return view('peminjaman.create', compact('alat', 'users'));
     }
 
-    // Simpan data peminjaman dari admin
     public function store(Request $request)
     {
         $data = $request->all();
         
-        // Validasi atau set status default jika belum ada
         if (!isset($data['status'])) {
             $data['status'] = 'Pending';
         }
@@ -43,7 +40,6 @@ class PeminjamanController
         return redirect(route('peminjaman.index'))->with('success', 'Data peminjaman berhasil ditambahkan!');
     }
 
-    // Form edit peminjaman oleh admin
     public function edit(Request $request, $id)
     {
         $data = Peminjaman::where('id_peminjaman', $id)->first();
@@ -56,7 +52,6 @@ class PeminjamanController
         return view('peminjaman.edit', compact('data', 'alat', 'users'));
     }
 
-    // Update data peminjaman oleh admin
     public function update(Request $request, $id)
     {
         $peminjaman = Peminjaman::where('id_peminjaman', $id)->first();
@@ -64,10 +59,8 @@ class PeminjamanController
             return redirect(route('peminjaman.index'))->with('error', 'Data peminjaman tidak ditemukan.');
         }
 
-        // Ambil semua request
         $input = $request->all();
 
-        // Mencegah error SQL Incorrect integer value jika input kosong
         if (empty($input['id_alat'])) {
             $input['id_alat'] = $peminjaman->id_alat;
         }
@@ -80,7 +73,6 @@ class PeminjamanController
         return redirect(route('peminjaman.index'))->with('success', 'Data peminjaman berhasil diperbarui!');
     }
 
-    // Hapus data peminjaman oleh admin
     public function delete(Request $request, $id)
     {
         $peminjaman = Peminjaman::where('id_peminjaman', $id)->first();
@@ -93,17 +85,15 @@ class PeminjamanController
 
 
     // ==========================================
-    // BAGIAN PETUGAS: Setujui & Pantau Peminjaman
+    // BAGIAN PETUGAS & PEMINJAM
     // ==========================================
 
-    // Menampilkan daftar peminjaman khusus untuk Petugas
     public function indexPetugas(Request $request)
     {
-        $datap = Peminjaman::orderBy('id_peminjaman', 'desc')->paginate(10);
+        $datap = Peminjaman::with(['user', 'alat'])->orderBy('id_peminjaman', 'desc')->paginate(10);
         return view('petugas.peminjaman.index', compact('datap'));
     }
 
-    // Proses mengubah status peminjaman (Disetujui atau Ditolak) oleh Petugas
     public function updateStatusPetugas(Request $request, $id)
     {
         $peminjaman = Peminjaman::where('id_peminjaman', $id)->first();
@@ -111,26 +101,18 @@ class PeminjamanController
             return redirect(route('petugas.peminjaman.index'))->with('error', 'Data peminjaman tidak ditemukan.');
         }
 
-        // Mengubah status sesuai input form (Disetujui / Ditolak)
         $peminjaman->status = $request->input('status');
         $peminjaman->save();
 
         return redirect(route('petugas.peminjaman.index'))->with('success', 'Status peminjaman berhasil diperbarui!');
     }
 
-    // Menampilkan halaman cetak laporan khusus Petugas
     public function cetakPetugas(Request $request)
     {
-        $datap = Peminjaman::orderBy('id_peminjaman', 'desc')->get();
+        $datap = Peminjaman::with(['user', 'alat'])->orderBy('id_peminjaman', 'desc')->get();
         return view('petugas.peminjaman.cetak', compact('datap'));
     }
 
-
-    // ==========================================
-    // BAGIAN PEMINJAM / SISWA: Pengajuan Mandiri
-    // ==========================================
-
-    // Menampilkan riwayat peminjaman milik user yang sedang login
     public function indexPeminjam(Request $request)
     {
         $currentUser = User::current();
@@ -139,22 +121,20 @@ class PeminjamanController
             return redirect(route('login'))->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        // Ambil data peminjaman HANYA milik user yang sedang login
-        $datap = Peminjaman::where('id_user', $currentUser->id)
+        $datap = Peminjaman::with(['user', 'alat'])
+                         ->where('id_user', $currentUser->id)
                          ->orderBy('id_peminjaman', 'desc')
                          ->paginate(5);
 
         return view('peminjam.index_peminjam', compact('datap'));
     }
 
-    // Form bagi siswa/peminjam untuk mengajukan peminjaman alat
     public function createPeminjam(Request $request)
     {
         $alat = Alat::all();
         return view('peminjam.create_peminjam', compact('alat'));
     }
 
-    // Proses simpan pengajuan peminjaman oleh siswa/peminjam
     public function storePeminjam(Request $request)
     {
         $currentUser = User::current();
@@ -165,7 +145,6 @@ class PeminjamanController
 
         $data = $request->all();
         
-        // Otomatis set id_user ke user yang sedang login dan status jadi 'Pending'
         $data['id_user'] = $currentUser->id;
         $data['status'] = 'Pending';
 

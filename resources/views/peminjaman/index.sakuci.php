@@ -92,10 +92,6 @@
         background-position: center 40%;
     }
 
-    /*
-    | Judul hero dibuat eksplisit putih supaya tidak mengikuti
-    | warna text-body Bootstrap yang bisa berubah saat dark mode.
-    */
     .hero-wrap h1 {
         font-family: var(--font-display);
         font-weight: 800 !important;
@@ -104,10 +100,6 @@
         text-wrap: balance;
     }
 
-    /*
-    | Bagian "Peminjaman Alat" dibuat lime agar sangat kontras
-    | dengan background hijau hero.
-    */
     .hero-wrap h1 .text-brand {
         color: var(--whistle) !important;
         -webkit-text-fill-color: var(--whistle);
@@ -122,9 +114,6 @@
         line-height: 1.7;
     }
 
-    /*
-    | Badge Transaksi Peminjaman
-    */
     .badge-brand {
         display: inline-flex;
         align-items: center;
@@ -150,9 +139,6 @@
         color: var(--whistle) !important;
     }
 
-    /*
-    | Tombol Tambah
-    */
     .btn-brand {
         position: relative;
         overflow: hidden;
@@ -190,8 +176,6 @@
     .btn-brand:hover i {
         transform: rotate(90deg) scale(1.1);
     }
-
-    /* ============ Kartu & tabel ============ */
 
     .card-brand {
         border: 1px solid var(--bs-border-color-translucent);
@@ -252,8 +236,6 @@
         transform: scaleY(1);
     }
 
-    /* Tombol aksi */
-
     .container-fluid td .btn {
         transition:
             transform 0.18s ease,
@@ -275,8 +257,6 @@
         transform: scale(1.15) rotate(-6deg);
     }
 
-    /* Paginasi */
-
     .container-fluid .pagination {
         --bs-pagination-color: var(--brand-1);
         --bs-pagination-hover-color: var(--brand-2);
@@ -286,14 +266,11 @@
             0 0 0 0.2rem rgba(13, 122, 80, 0.25);
     }
 
-    /* ============ Animasi ============ */
-
     @keyframes heroIn {
         from {
             opacity: 0;
             transform: translateY(18px) scale(0.985);
         }
-
         to {
             opacity: 1;
             transform: none;
@@ -305,7 +282,6 @@
             opacity: 0;
             transform: translateY(14px);
         }
-
         to {
             opacity: 1;
             transform: none;
@@ -317,7 +293,6 @@
             opacity: 0;
             transform: translateY(-12px);
         }
-
         to {
             opacity: 1;
             transform: none;
@@ -328,11 +303,9 @@
         0% {
             box-shadow: 0 0 0 0 rgba(217, 242, 75, 0.55);
         }
-
         70% {
             box-shadow: 0 0 0 10px rgba(217, 242, 75, 0);
         }
-
         100% {
             box-shadow: 0 0 0 0 rgba(217, 242, 75, 0);
         }
@@ -342,126 +315,41 @@
         from {
             transform: translateY(0);
         }
-
         to {
             transform: translateY(-6px);
         }
     }
 
     @media (prefers-reduced-motion: no-preference) {
-
         .container-fluid .alert {
-            animation:
-                slideDown 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+            animation: slideDown 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
         }
-
         .hero-wrap {
-            animation:
-                heroIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+            animation: heroIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
         }
-
         .hero-wrap > * {
-            animation:
-                fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+            animation: fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
         }
-
-        .hero-wrap > *:nth-child(1) {
-            animation-delay: 0.15s;
-        }
-
-        .hero-wrap > *:nth-child(2) {
-            animation-delay: 0.25s;
-        }
-
-        .hero-wrap > *:nth-child(3) {
-            animation-delay: 0.35s;
-        }
-
-        .hero-wrap > *:nth-child(4) {
-            animation-delay: 0.45s;
-        }
-
+        .hero-wrap > *:nth-child(1) { animation-delay: 0.15s; }
+        .hero-wrap > *:nth-child(2) { animation-delay: 0.25s; }
+        .hero-wrap > *:nth-child(3) { animation-delay: 0.35s; }
+        .hero-wrap > *:nth-child(4) { animation-delay: 0.45s; }
         .hero-wrap > .badge-brand {
             animation:
                 fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards,
                 badgePulse 2.6s ease-out 1.2s infinite;
         }
-
         .card-brand {
-            animation:
-                fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s backwards;
+            animation: fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s backwards;
         }
-
         .container-fluid .table tbody tr {
             animation: fadeUp 0.45s ease backwards;
         }
-
-        .container-fluid .table tbody tr:nth-child(1) {
-            animation-delay: 0.55s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(2) {
-            animation-delay: 0.62s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(3) {
-            animation-delay: 0.69s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(4) {
-            animation-delay: 0.76s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(5) {
-            animation-delay: 0.83s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(6) {
-            animation-delay: 0.9s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(7) {
-            animation-delay: 0.97s;
-        }
-
-        .container-fluid .table tbody tr:nth-child(8) {
-            animation-delay: 1.04s;
-        }
-
         .container-fluid .bi-inbox {
             display: inline-block;
             animation: floatY 3s ease-in-out infinite alternate;
         }
     }
-
-    @media (prefers-reduced-motion: reduce) {
-
-        .btn-brand,
-        .btn-brand i,
-        .container-fluid td .btn,
-        .container-fluid td .btn i {
-            transition: none;
-        }
-
-        .btn-brand:hover,
-        .container-fluid td .btn:hover {
-            transform: none;
-        }
-    }
-
-    @media (max-width: 576px) {
-
-        .hero-wrap {
-            padding: 2rem 1.1rem;
-        }
-
-        .hero-wrap::before {
-            background-size: 520px auto;
-            opacity: 0.09;
-        }
-    }
-
-    /* ============ Mode gelap ============ */
 
     [data-bs-theme="dark"] .hero-wrap {
         background:
@@ -477,14 +365,9 @@
                 #020a08 100%
             );
         border-color: rgba(255, 255, 255, 0.08);
-        box-shadow:
-            0 24px 48px -22px rgba(0, 0, 0, 0.7) !important;
+        box-shadow: 0 24px 48px -22px rgba(0, 0, 0, 0.7) !important;
     }
 
-    /*
-    | Pastikan badge "Transaksi Peminjaman" tetap sangat jelas
-    | pada dark mode.
-    */
     [data-bs-theme="dark"] .badge-brand {
         background: #d9f24b !important;
         color: #03251c !important;
@@ -498,10 +381,6 @@
         color: #064e3b !important;
     }
 
-    /*
-    | Pastikan "Daftar" putih dan "Peminjaman Alat" lime
-    | tetap kontras pada dark mode.
-    */
     [data-bs-theme="dark"] .hero-wrap h1 {
         color: #ffffff !important;
     }
@@ -663,7 +542,7 @@
                                 {{ $no++ }}
                             </td>
 
-                            <!-- Peminjam -->
+                            <!-- Peminjam (Diperbarui menggunakan username) -->
                             <td class="px-3">
 
                                 <div class="d-flex align-items-center gap-2">
@@ -675,7 +554,7 @@
                                     </div>
 
                                     <span class="fw-bold text-body fs-7">
-                                        {{ $peminjaman->user->nama ?? 'User ID: ' . $peminjaman->id_user }}
+                                        {{ $peminjaman->user->username ?? ('User ID: ' . $peminjaman->id_user) }}
                                     </span>
 
                                 </div>
