@@ -12,6 +12,7 @@ class Alat extends Model // <-- Wajib 'Alat' (A besar)
     protected array $fillable = [
         'id_kategori',
         'nama_alat',
-        'kode_alat'
+        'kode_alat',
+        'stok'
     ];
 }

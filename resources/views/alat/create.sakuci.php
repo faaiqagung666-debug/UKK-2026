@@ -256,7 +256,7 @@
                     </div>
 
                     <p class="text-body-secondary small form-subtitle mb-0 mt-3">
-                        Tambahkan data alat inventaris baru beserta kode dan kategori alat.
+                        Tambahkan data alat inventaris baru beserta kode, kategori, dan stok alat.
                     </p>
 
                 </div>
@@ -269,15 +269,10 @@
 
                         {{-- Nama Alat --}}
                         <div class="form-group">
-
-                            <label
-                                for="nama_alat"
-                                class="form-label"
-                            >
+                            <label for="nama_alat" class="form-label">
                                 <i class="bi bi-box-seam field-icon"></i>
                                 Nama Alat
                             </label>
-
                             <input
                                 type="text"
                                 name="nama_alat"
@@ -287,20 +282,14 @@
                                 placeholder="Masukkan nama alat"
                                 required
                             >
-
                         </div>
 
                         {{-- Kode Alat --}}
                         <div class="form-group">
-
-                            <label
-                                for="kode_alat"
-                                class="form-label"
-                            >
+                            <label for="kode_alat" class="form-label">
                                 <i class="bi bi-upc-scan field-icon"></i>
                                 Kode Alat
                             </label>
-
                             <input
                                 type="text"
                                 name="kode_alat"
@@ -310,20 +299,14 @@
                                 placeholder="Masukkan kode alat"
                                 required
                             >
-
                         </div>
 
                         {{-- Kategori --}}
                         <div class="form-group">
-
-                            <label
-                                for="id_kategori"
-                                class="form-label"
-                            >
+                            <label for="id_kategori" class="form-label">
                                 <i class="bi bi-tags field-icon"></i>
                                 Kategori
                             </label>
-
                             <select
                                 name="id_kategori"
                                 id="id_kategori"
@@ -334,7 +317,7 @@
                                     -- Pilih Kategori --
                                 </option>
 
-                                @foreach ($kategori as $k)
+                                @foreach ($kategori as$k)
                                     <option
                                         value="{{ $k->id_kategori }}"
                                         {{ old('id_kategori') == $k->id_kategori ? 'selected' : '' }}
@@ -342,14 +325,29 @@
                                         {{ $k->nama_kategori }}
                                     </option>
                                 @endforeach
-
                             </select>
+                        </div>
 
+                        {{-- Stok Alat --}}
+                        <div class="form-group">
+                            <label for="stok" class="form-label">
+                                <i class="bi bi-stack field-icon"></i>
+                                Jumlah Stok
+                            </label>
+                            <input
+                                type="number"
+                                name="stok"
+                                id="stok"
+                                class="form-control"
+                                value="{{ old('stok', 1) }}"
+                                min="0"
+                                placeholder="Masukkan jumlah stok"
+                                required
+                            >
                         </div>
 
                         {{-- Submit --}}
                         <div class="form-footer">
-
                             <button
                                 type="submit"
                                 class="btn btn-brand d-inline-flex align-items-center gap-2"
@@ -357,7 +355,6 @@
                                 <i class="bi bi-check-circle-fill"></i>
                                 <span>Simpan</span>
                             </button>
-
                         </div>
 
                     </form>

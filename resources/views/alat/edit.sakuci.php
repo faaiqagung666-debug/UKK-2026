@@ -262,7 +262,7 @@
                     </div>
 
                     <p class="text-body-secondary small edit-subtitle mb-0 mt-3">
-                        Perbarui informasi alat inventaris dan kategori sesuai data terbaru.
+                        Perbarui informasi alat inventaris, kategori, dan stok sesuai data terbaru.
                     </p>
 
                 </div>
@@ -279,15 +279,10 @@
 
                         {{-- Nama Alat --}}
                         <div class="form-group">
-
-                            <label
-                                for="nama_alat"
-                                class="form-label"
-                            >
+                            <label for="nama_alat" class="form-label">
                                 <i class="bi bi-box-seam field-icon"></i>
                                 Nama Alat
                             </label>
-
                             <input
                                 type="text"
                                 name="nama_alat"
@@ -296,20 +291,14 @@
                                 value="{{ $datal->nama_alat }}"
                                 required
                             >
-
                         </div>
 
                         {{-- Kode Alat --}}
                         <div class="form-group">
-
-                            <label
-                                for="kode_alat"
-                                class="form-label"
-                            >
+                            <label for="kode_alat" class="form-label">
                                 <i class="bi bi-upc-scan field-icon"></i>
                                 Kode Alat
                             </label>
-
                             <input
                                 type="text"
                                 name="kode_alat"
@@ -318,20 +307,14 @@
                                 value="{{ $datal->kode_alat }}"
                                 required
                             >
-
                         </div>
 
                         {{-- Kategori --}}
                         <div class="form-group">
-
-                            <label
-                                for="id_kategori"
-                                class="form-label"
-                            >
+                            <label for="id_kategori" class="form-label">
                                 <i class="bi bi-tags field-icon"></i>
                                 Kategori
                             </label>
-
                             <select
                                 name="id_kategori"
                                 id="id_kategori"
@@ -351,12 +334,27 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
 
+                        {{-- Stok Alat --}}
+                        <div class="form-group">
+                            <label for="stok" class="form-label">
+                                <i class="bi bi-stack field-icon"></i>
+                                Jumlah Stok
+                            </label>
+                            <input
+                                type="number"
+                                name="stok"
+                                id="stok"
+                                class="form-control"
+                                value="{{ $datal->stok }}"
+                                min="0"
+                                required
+                            >
                         </div>
 
                         {{-- Tombol --}}
                         <div class="edit-footer">
-
                             <button
                                 type="submit"
                                 class="btn btn-brand d-inline-flex align-items-center gap-2"
@@ -364,7 +362,6 @@
                                 <i class="bi bi-check-circle-fill"></i>
                                 <span>Simpan Perubahan</span>
                             </button>
-
                         </div>
 
                     </form>

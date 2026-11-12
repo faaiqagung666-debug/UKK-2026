@@ -124,9 +124,9 @@ Route::group(['prefix' => 'peminjam', 'middleware' => 'peminjam'], function () {
     // Route khusus melihat katalog/daftar alat
     Route::get('/daftar-alat', [AlatController::class, 'daftarAlatPeminjam'])->name('peminjam.alat');
 
-    // Rute khusus pengguna/peminjam mengajukan peminjaman alat
+    // Rute khusus pengguna/peminjam mengajukan peminjaman alat (Ditambahkan {id_alat?} agar bisa menangkap parameter URL)
     Route::get('/peminjaman', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.indexPeminjam');
-    Route::get('/peminjaman/ajukan', [PeminjamanController::class, 'createPeminjam'])->name('peminjam.createPeminjam');
+    Route::get('/peminjaman/ajukan/{id_alat?}', [PeminjamanController::class, 'createPeminjam'])->name('peminjam.createPeminjam');
     Route::post('/peminjaman/ajukan', [PeminjamanController::class, 'storePeminjam'])->name('peminjam.storePeminjam');
     Route::get('/riwayat-peminjaman', [PeminjamanController::class, 'indexPeminjam'])->name('peminjam.riwayat');
 

@@ -9,14 +9,15 @@ use App\Models\Kategori;
 
 class AlatController extends Controller
 {
-    // Method khusus peminjam untuk melihat daftar alat
+    // Method khusus peminjam untuk melihat daftar alat dan fitur pencarian
     public function daftarAlatPeminjam(Request $request)
     {
         $query = Alat::query();
 
-        // Fitur Cari Alat berdasarkan nama atau kode
-        if ($request->has('q') && !empty($request->q)) {
-            $search = $request->q;
+        // Menangkap parameter pencarian dengan andal dari request GET
+        $search = $request->input('q') ?? $request->q;
+
+        if (!empty($search)) {
             $query->where('nama_alat', 'LIKE', "%{$search}%")
                   ->orWhere('kode_alat', 'LIKE', "%{$search}%");
         }
@@ -50,12 +51,14 @@ class AlatController extends Controller
     public function store(Request $request)
     {
         $datal = $request->validate([
-            'nama_alat' => 'required|min:3|max:100',
-            'kode_alat' => 'required|min:3|max:100',
+            'nama_alat'   => 'required|min:3|max:100',
+            'kode_alat'   => 'required|min:3|max:100',
             'id_kategori' => 'required',
+            'stok'        => 'required|numeric|min:0',
         ]);
+        
         Alat::create($datal);
-        return redirect(route('alat.index'))->with('success', 'Alat berhasil ditambahkan.');
+        return redirect(route('alat.index'))->with('success', 'Alat dan stok berhasil ditambahkan.');
     }
 
     public function edit(Request $request, $id_alat)
@@ -71,7 +74,7 @@ class AlatController extends Controller
 
         $alat = Alat::findOrFail($id_alat);
         $alat->update($datal);
-        return redirect(route('alat.index'))->with('success', 'Alat berhasil diubah');
+        return redirect(route('alat.index'))->with('success', 'Data alat & stok berhasil diubah');
     }
 
     public function delete(Request $request, $id_alat)

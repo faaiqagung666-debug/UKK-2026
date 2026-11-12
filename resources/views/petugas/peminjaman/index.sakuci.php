@@ -95,10 +95,10 @@
         box-shadow: inset 4px 0 0 var(--brand-1);
     }
 
-    .badge-id {
+    .badge-name {
         background: rgba(13, 122, 80, 0.07);
         color: var(--brand-1);
-        border-color: rgba(13, 122, 80, 0.18) !important;
+        border: 1px solid rgba(13, 122, 80, 0.18) !important;
     }
 
     .btn-success {
@@ -130,7 +130,7 @@
         border-bottom-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    [data-bs-theme="dark"] .badge-id {
+    [data-bs-theme="dark"] .badge-name {
         background: rgba(217, 242, 75, 0.08);
         color: var(--whistle);
         border-color: rgba(217, 242, 75, 0.18) !important;
@@ -219,8 +219,8 @@
                     <thead class="bg-body-tertiary border-bottom text-body-secondary text-uppercase fs-8 tracking-wider">
                         <tr>
                             <th class="py-3 px-4 text-center" style="width: 5%;">No</th>
-                            <th class="py-3 px-3">ID User</th>
-                            <th class="py-3 px-3">ID Alat</th>
+                            <th class="py-3 px-3">Nama Peminjam</th>
+                            <th class="py-3 px-3">Nama Alat</th>
                             <th class="py-3 px-3">Jumlah</th>
                             <th class="py-3 px-3">Tgl Pinjam</th>
                             <th class="py-3 px-3">Tgl Kembali</th>
@@ -236,17 +236,19 @@
                                 {{ $index + 1 }}
                             </td>
                             
-                            <!-- ID User -->
+                            <!-- Nama Peminjam (User) -->
                             <td class="px-3">
-                                <span class="badge badge-id fw-bold px-2.5 py-1.5 rounded-2 fs-8">
-                                    #{{ $p->id_user }}
+                                <span class="badge badge-name fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                    <i class="bi bi-person me-1"></i>
+                                    {{ $p->user->username ?? $p->user->name ?? 'User #' . $p->id_user }}
                                 </span>
                             </td>
 
-                            <!-- ID Alat -->
+                            <!-- Nama Alat -->
                             <td class="px-3">
-                                <span class="badge badge-id fw-bold px-2.5 py-1.5 rounded-2 fs-8">
-                                    #{{ $p->id_alat }}
+                                <span class="badge badge-name fw-bold px-2.5 py-1.5 rounded-2 fs-8">
+                                    <i class="bi bi-tools me-1"></i>
+                                    {{ $p->alat->nama_alat ?? $p->alat->nama ?? 'Alat #' . $p->id_alat }}
                                 </span>
                             </td>
 

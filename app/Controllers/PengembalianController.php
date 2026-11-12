@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Pengembalian;
 use App\Models\Peminjaman;
 use App\Models\User;
-use App\Models\alat;
+use App\Models\Alat;
 use Sakuci\Controller;
 use Sakuci\Http\Request;
 
@@ -15,7 +15,6 @@ class PengembalianController extends Controller
     // BAGIAN ADMIN: KELOLA SEMUA PENGEMBALIAN
     // ==========================================
 
-    // Menampilkan semua daftar pengembalian untuk admin
     public function index(Request $request)
     {
         $datap = Pengembalian::orderBy(
@@ -23,43 +22,46 @@ class PengembalianController extends Controller
             'desc'
         )->paginate(10);
 
-        $peminjaman = Peminjaman::all();
+        // Ambil peminjaman beserta relasi user-nya
+        $peminjamans = Peminjaman::with('user')->get();
         $users = User::all();
         $alats = Alat::all();
 
-        // Daftar peminjaman
+        // Mapping data peminjaman untuk memudahkan pencarian user di View
         $peminjamanList = [];
+        $peminjamList = []; // Array khusus untuk menyimpan nama peminjam berdasarkan id_peminjaman
 
-        foreach ($peminjaman as $p) {
-
+        foreach ($peminjamans as $p) {
             $pid = $p->id_peminjaman ?? $p->id;
-
             $peminjamanList[$pid] = $p;
+
+            // Cari nama peminjam dari relasi user atau fallback
+            $namaPeminjam = '-';
+            if ($p->user) {
+                $namaPeminjam = $p->user->username ?? $p->user->nama ?? $p->user->name ?? 'User #' . $p->id_user;
+            } elseif ($p->id_user) {
+                $matchedUser = User::where('id', $p->id_user)->first() ?? User::where('id_user', $p->id_user)->first();
+                if ($matchedUser) {
+                    $namaPeminjam = $matchedUser->username ?? $matchedUser->nama ?? $matchedUser->name ?? 'User #' . $p->id_user;
+                } else {
+                    $namaPeminjam = 'User #' . $p->id_user;
+                }
+            }
+            $peminjamList[$pid] = $namaPeminjam;
         }
 
-        // Daftar user
+        // Daftar user umum
         $userList = [];
-
         foreach ($users as $u) {
-
             $id = $u->id ?? $u->id_user;
-
-            $userList[$id] =
-                $u->username
-                ?? $u->nama
-                ?? "User #{$id}";
+            $userList[$id] = $u->username ?? $u->nama ?? $u->name ?? "User #{$id}";
         }
 
         // Daftar alat
         $alatList = [];
-
         foreach ($alats as $a) {
-
             $id = $a->id_alat ?? $a->id;
-
-            $alatList[$id] =
-                $a->nama_alat
-                ?? "Alat #{$id}";
+            $alatList[$id] = $a->nama_alat ?? "Alat #{$id}";
         }
 
         return view(
@@ -67,6 +69,7 @@ class PengembalianController extends Controller
             compact(
                 'datap',
                 'peminjamanList',
+                'peminjamList',
                 'userList',
                 'alatList'
             )
@@ -80,10 +83,6 @@ class PengembalianController extends Controller
 
     public function create(Request $request)
     {
-        /*
-        | Hanya tampilkan peminjaman yang belum dikembalikan
-        */
-
         $peminjaman = Peminjaman::where(
             'status',
             '!=',
@@ -93,29 +92,16 @@ class PengembalianController extends Controller
         $users = User::all();
         $alats = Alat::all();
 
-        // Daftar user
         $userList = [];
-
         foreach ($users as $u) {
-
             $id = $u->id ?? $u->id_user;
-
-            $userList[$id] =
-                $u->username
-                ?? $u->nama
-                ?? "User #{$id}";
+            $userList[$id] = $u->username ?? $u->nama ?? $u->name ?? "User #{$id}";
         }
 
-        // Daftar alat
         $alatList = [];
-
         foreach ($alats as $a) {
-
             $id = $a->id_alat ?? $a->id;
-
-            $alatList[$id] =
-                $a->nama_alat
-                ?? "Alat #{$id}";
+            $alatList[$id] = $a->nama_alat ?? "Alat #{$id}";
         }
 
         return view(
@@ -144,30 +130,11 @@ class PengembalianController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        /*
-        | Nilai default
-        */
-
-        $validatedData['terlambat_hari'] =
-            $validatedData['terlambat_hari'] ?? 0;
-
-        $validatedData['denda'] =
-            $validatedData['denda'] ?? 0;
-
-        $validatedData['kondisi_barang'] =
-            $validatedData['kondisi_barang'] ?? 'Baik';
-
-
-        /*
-        | Simpan pengembalian
-        */
+        $validatedData['terlambat_hari'] = $validatedData['terlambat_hari'] ?? 0;
+        $validatedData['denda'] = $validatedData['denda'] ?? 0;
+        $validatedData['kondisi_barang'] = $validatedData['kondisi_barang'] ?? 'Baik';
 
         Pengembalian::create($validatedData);
-
-
-        /*
-        | Update status peminjaman
-        */
 
         $peminjaman = Peminjaman::where(
             'id_peminjaman',
@@ -175,12 +142,10 @@ class PengembalianController extends Controller
         )->first();
 
         if ($peminjaman) {
-
             $peminjaman->update([
                 'status' => 'Dikembalikan'
             ]);
         }
-
 
         return redirect(
             route('pengembalian.index')
@@ -197,22 +162,12 @@ class PengembalianController extends Controller
 
     public function edit(Request $request, $id_pengembalian)
     {
-        /*
-        | Ambil data pengembalian
-        */
-
         $datap = Pengembalian::where(
             'id_pengembalian',
             $id_pengembalian
         )->first();
 
-
-        /*
-        | Jika data tidak ditemukan
-        */
-
         if (!$datap) {
-
             return redirect(
                 route('pengembalian.index')
             )->with(
@@ -221,126 +176,36 @@ class PengembalianController extends Controller
             );
         }
 
-
-        /*
-        | Ambil peminjaman yang terkait
-        |
-        | Gunakan where()->first(), bukan find(),
-        | agar konsisten dengan PeminjamanController.
-        */
-
         $peminjamanData = Peminjaman::where(
             'id_peminjaman',
             $datap->id_peminjaman
         )->first();
 
-
-        /*
-        | Blade membutuhkan $peminjaman sebagai iterable.
-        |
-        | Jadi object peminjaman dibungkus ke dalam array.
-        */
-
         $peminjaman = [];
-
         if ($peminjamanData) {
-
             $peminjaman[] = $peminjamanData;
         }
 
-
-        /*
-        | Nilai default
-        */
-
         $peminjamName = '-';
-
         $alatName = '-';
 
-
-        /*
-        | Ambil informasi user dan alat
-        */
-
         if ($peminjamanData) {
-
-            /*
-            | User / Peminjam
-            */
-
-            $user = User::where(
-                'id',
-                $peminjamanData->id_user
-            )->first();
-
-            /*
-            | Beberapa struktur database mungkin menggunakan id_user
-            | sebagai primary key, jadi fallback tetap disediakan.
-            */
-
-            if (!$user) {
-
-                $user = User::where(
-                    'id_user',
-                    $peminjamanData->id_user
-                )->first();
-            }
-
+            $user = User::where('id', $peminjamanData->id_user)->first() ?? User::where('id_user', $peminjamanData->id_user)->first();
 
             if ($user) {
-
-                $peminjamName =
-                    $user->username
-                    ?? $user->nama
-                    ?? ('User #' . $peminjamanData->id_user);
-
+                $peminjamName = $user->username ?? $user->nama ?? $user->name ?? ('User #' . $peminjamanData->id_user);
             } else {
-
-                $peminjamName =
-                    'User #' . $peminjamanData->id_user;
+                $peminjamName = 'User #' . $peminjamanData->id_user;
             }
 
-
-            /*
-            | Alat
-            */
-
-            $alat = Alat::where(
-                'id_alat',
-                $peminjamanData->id_alat
-            )->first();
-
-
-            /*
-            | Fallback apabila tabel menggunakan id
-            */
-
-            if (!$alat) {
-
-                $alat = Alat::where(
-                    'id',
-                    $peminjamanData->id_alat
-                )->first();
-            }
-
+            $alat = Alat::where('id_alat', $peminjamanData->id_alat)->first() ?? Alat::where('id', $peminjamanData->id_alat)->first();
 
             if ($alat) {
-
-                $alatName =
-                    $alat->nama_alat
-                    ?? ('Alat #' . $peminjamanData->id_alat);
-
+                $alatName = $alat->nama_alat ?? ('Alat #' . $peminjamanData->id_alat);
             } else {
-
-                $alatName =
-                    'Alat #' . $peminjamanData->id_alat;
+                $alatName = 'Alat #' . $peminjamanData->id_alat;
             }
         }
-
-
-        /*
-        | Kirim data ke Blade
-        */
 
         return view(
             'pengembalian.edit',
@@ -369,23 +234,12 @@ class PengembalianController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-
-        /*
-        | Cari data pengembalian
-        */
-
         $pengembalian = Pengembalian::where(
             'id_pengembalian',
             $id_pengembalian
         )->first();
 
-
-        /*
-        | Jika tidak ditemukan
-        */
-
         if (!$pengembalian) {
-
             return redirect(
                 route('pengembalian.index')
             )->with(
@@ -394,32 +248,18 @@ class PengembalianController extends Controller
             );
         }
 
-
-        /*
-        | Update data
-        */
-
         $pengembalian->update($validatedData);
-
-
-        /*
-        | Pastikan peminjaman yang terkait berstatus
-        | Dikembalikan.
-        */
 
         $peminjaman = Peminjaman::where(
             'id_peminjaman',
             $validatedData['id_peminjaman']
         )->first();
 
-
         if ($peminjaman) {
-
             $peminjaman->update([
                 'status' => 'Dikembalikan'
             ]);
         }
-
 
         return redirect(
             route('pengembalian.index')
@@ -441,9 +281,7 @@ class PengembalianController extends Controller
             $id_pengembalian
         )->first();
 
-
         if (!$pengembalian) {
-
             return redirect(
                 route('pengembalian.index')
             )->with(
@@ -452,9 +290,7 @@ class PengembalianController extends Controller
             );
         }
 
-
         $pengembalian->delete();
-
 
         return redirect(
             route('pengembalian.index')
@@ -491,9 +327,7 @@ class PengembalianController extends Controller
     {
         $currentUser = User::current();
 
-
         if (!$currentUser) {
-
             return redirect(
                 route('login')
             )->with(
@@ -501,7 +335,6 @@ class PengembalianController extends Controller
                 'Silakan login terlebih dahulu.'
             );
         }
-
 
         $datap = Peminjaman::where(
             'id_user',
@@ -520,7 +353,6 @@ class PengembalianController extends Controller
         )
         ->paginate(5);
 
-
         return view(
             'peminjam.pengembalian',
             compact('datap')
@@ -536,19 +368,12 @@ class PengembalianController extends Controller
         Request $request,
         $id
     ) {
-
-        /*
-        | Cari peminjaman
-        */
-
         $peminjaman = Peminjaman::where(
             'id_peminjaman',
             $id
         )->first();
 
-
         if (!$peminjaman) {
-
             return redirect(
                 route('peminjam.pengembalian')
             )->with(
@@ -557,71 +382,31 @@ class PengembalianController extends Controller
             );
         }
 
-
-        /*
-        | Kondisi barang
-        */
-
         $kondisi = $request->input(
             'kondisi_barang',
             'Baik'
         );
 
-
-        /*
-        | Hitung denda berdasarkan kondisi
-        */
-
         $denda = 0;
-
-
         if ($kondisi == 'Rusak Ringan') {
-
             $denda = 10000;
-
         } elseif ($kondisi == 'Rusak Berat') {
-
             $denda = 50000;
         }
 
-
-        /*
-        | Simpan pengembalian
-        */
-
         Pengembalian::create([
-            'id_peminjaman' =>
-                $peminjaman->id_peminjaman,
-
-            'tanggal_pengembalian' =>
-                date('Y-m-d H\:i:s'),
-
-            'terlambat_hari' =>
-                0,
-
-            'denda' =>
-                $denda,
-
-            'kondisi_barang' =>
-                $kondisi,
-
-            'catatan' =>
-                'Dikembalikan secara mandiri melalui menu pengembalian.'
+            'id_peminjaman' => $peminjaman->id_peminjaman,
+            'tanggal_pengembalian' => date('Y-m-d H\:i:s'),
+            'terlambat_hari' => 0,
+            'denda' => $denda,
+            'kondisi_barang' => $kondisi,
+            'catatan' => 'Dikembalikan secara mandiri melalui menu pengembalian.'
         ]);
-
-
-        /*
-        | Update status peminjaman
-        */
 
         $peminjaman->update([
-            'status' =>
-                'Dikembalikan',
-
-            'denda' =>
-                $denda
+            'status' => 'Dikembalikan',
+            'denda' => $denda
         ]);
-
 
         return redirect(
             route('peminjam.pengembalian')
