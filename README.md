@@ -1,3 +1,19 @@
+# AKUN DEMO
+ADMIN
+username:admin
+password:rahasia123
+
+PEMINJAM
+username:peminjam
+password:peminjam
+
+PETUGAS
+username:petugas
+password:petugas
+
+
+```
+
 # Sakuci Framework
 
 Kerangka PHP ringan bergaya Laravel -- **Route, Model, View, Controller** -- tanpa Composer,
