@@ -14,11 +14,21 @@ class PeminjamanController extends Controller
     // BAGIAN ADMIN: Kelola Semua Peminjaman
     // ==========================================
 
-    public function index(Request $request)
-    {
-        $datap = Peminjaman::with(['user', 'alat'])->orderBy('id_peminjaman', 'desc')->paginate(4);
-        return view('peminjaman.index', compact('datap'));
+   public function index()
+{
+    $datap = Peminjaman::paginate(10); 
+    $semuaPeminjaman = Peminjaman::all(); 
+    $totalDendaSemua = 0;
+    foreach ($semuaPeminjaman as $item) {
+        $totalDendaSemua += ($item->denda ?? 0);
     }
+    $totalDendaHalamanIni = 0;
+    foreach ($datap as $item) {
+        $totalDendaHalamanIni += ($item->denda ?? 0);
+    }
+    $totalSemuaData = count($semuaPeminjaman); 
+    return view('peminjaman.index', compact('datap', 'totalDendaSemua', 'totalDendaHalamanIni', 'totalSemuaData'));
+}
 
     public function create(Request $request)
     {

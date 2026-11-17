@@ -162,7 +162,6 @@
             opacity: 0;
             transform: translateY(15px);
         }
-
         to {
             opacity: 1;
             transform: translateY(0);
@@ -225,19 +224,15 @@
             padding-left: .75rem !important;
             padding-right: .75rem !important;
         }
-
         .page-header {
             padding: 1.2rem;
         }
-
         .return-card .card-body {
             padding: 1.2rem !important;
         }
-
         .action-buttons {
             flex-direction: column-reverse;
         }
-
         .action-buttons .btn {
             width: 100%;
         }
@@ -248,46 +243,29 @@
 
     <!-- Header Halaman -->
     <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-
         <div class="d-flex align-items-center gap-3">
             <div class="page-icon">
                 <i class="bi bi-box-arrow-in-down"></i>
             </div>
-
             <div>
-                <h3 class="fw-bold mb-1">
-                    Tambah Data Pengembalian
-                </h3>
-
-                <p class="text-body-secondary small mb-0">
-                    Catat pengembalian alat inventaris dan hitung denda jika ada.
-                </p>
+                <h3 class="fw-bold mb-1">Tambah Data Pengembalian</h3>
+                <p class="text-body-secondary small mb-0">Catat pengembalian alat inventaris dan hitung denda jika ada.</p>
             </div>
         </div>
-
-        <a
-            href="{{ route('pengembalian.index') }}"
-            class="btn btn-back btn-sm px-3 py-2 d-inline-flex align-items-center gap-2"
-        >
+        <a href="{{ route('pengembalian.index') }}" class="btn btn-back btn-sm px-3 py-2 d-inline-flex align-items-center gap-2">
             <i class="bi bi-arrow-left"></i>
             <span>Kembali</span>
         </a>
-
     </div>
 
     <!-- Card Form -->
     <div class="card return-card">
-
         <div class="return-card-header d-flex align-items-center gap-2">
             <i class="bi bi-clipboard-check fs-5"></i>
-
-            <h6 class="fw-bold mb-0 text-body">
-                Formulir Pengembalian Alat
-            </h6>
+            <h6 class="fw-bold mb-0 text-body">Formulir Pengembalian Alat</h6>
         </div>
 
         <div class="card-body p-4">
-
             <form action="{{ route('pengembalian.store') }}" method="POST">
                 @csrf
 
@@ -295,35 +273,23 @@
 
                     <!-- Peminjaman ID -->
                     <div class="col-md-6">
-                        <label
-                            for="id_peminjaman"
-                            class="form-label fw-semibold"
-                        >
-                            Pilih Peminjaman
-                        </label>
+                        <label for="id_peminjaman" class="form-label fw-semibold">Pilih Peminjaman</label>
+                        <select name="id_peminjaman" id="id_peminjaman" class="form-select" required>
+                            <option value="">-- Pilih Peminjaman Belum Dikembalikan --</option>
 
-                        <select
-                            name="id_peminjaman"
-                            id="id_peminjaman"
-                            class="form-select"
-                            required
-                        >
-                            <option value="">
-                                -- Pilih Peminjaman Belum Dikembalikan --
-                            </option>
-
-                            @foreach($peminjaman as $p)
+                            @foreach($peminjaman as$p)
                                 @php
                                     $pid = $p->id_peminjaman ?? $p->id;
-                                    $uid = $p->user->nama ?? $p->id_user ?? '-';
-                                    $aid = $p->alat->nama_alat ?? $p->id_alat ?? '-';
+                                    // Mencakup berbagai kemungkinan nama kolom pada tabel relasi user dan alat
+                                    $userObj =$p->user ?? null;
+                                    $alatObj =$p->alat ?? null;
+
+                                    $namaUser = $userObj->name ?? $userObj->nama ?? $userObj->username ?? ('User #' . ($p->id_user ?? '-'));
+                                    $namaAlat =$alatObj->nama_alat ?? $alatObj->nama ?? ('Alat #' . ($p->id_alat ?? '-'));
                                 @endphp
 
-                                <option
-                                    value="{{ $pid }}"
-                                    {{ old('id_peminjaman') == $pid ? 'selected' : '' }}
-                                >
-                                    ID #{{ $pid }} (User: {{ $uid }}, Alat: {{ $aid }})
+                                <option value="{{ $pid }}" {{ old('id_peminjaman') == $pid ? 'selected' : '' }}>
+                                    ID #{{ $pid }} (User: {{ $namaUser }}, Alat: {{$namaAlat }})
                                 </option>
                             @endforeach
                         </select>
@@ -331,151 +297,47 @@
 
                     <!-- Tanggal Pengembalian -->
                     <div class="col-md-6">
-                        <label
-                            for="tanggal_pengembalian"
-                            class="form-label fw-semibold"
-                        >
-                            Tanggal Pengembalian
-                        </label>
-
-                        <input
-                            type="datetime-local"
-                            name="tanggal_pengembalian"
-                            id="tanggal_pengembalian"
-                            class="form-control"
-                            value="{{ old('tanggal_pengembalian', date('Y-m-d\TH:i')) }}"
-                            required
-                        >
-                    </div>
-
-                    <!-- Terlambat -->
-                    <div class="col-md-4">
-                        <label
-                            for="terlambat_hari"
-                            class="form-label fw-semibold"
-                        >
-                            Terlambat (Hari)
-                        </label>
-
-                        <input
-                            type="number"
-                            min="0"
-                            name="terlambat_hari"
-                            id="terlambat_hari"
-                            class="form-control"
-                            value="{{ old('terlambat_hari', 0) }}"
-                        >
+                        <label for="tanggal_pengembalian" class="form-label fw-semibold">Tanggal Pengembalian</label>
+                        <input type="datetime-local" name="tanggal_pengembalian" id="tanggal_pengembalian" class="form-control" value="{{ old('tanggal_pengembalian', date('Y-m-d\TH:i')) }}" required>
                     </div>
 
                     <!-- Denda -->
                     <div class="col-md-4">
-                        <label
-                            for="denda"
-                            class="form-label fw-semibold"
-                        >
-                            Denda (Rp)
-                        </label>
-
-                        <input
-                            type="number"
-                            min="0"
-                            name="denda"
-                            id="denda"
-                            class="form-control"
-                            value="{{ old('denda', 0) }}"
-                        >
+                        <label for="denda" class="form-label fw-semibold">Denda (Rp)</label>
+                        <input type="number" min="0" name="denda" id="denda" class="form-control" value="{{ old('denda', 0) }}">
                     </div>
 
                     <!-- Kondisi Barang -->
                     <div class="col-md-4">
-                        <label
-                            for="kondisi_barang"
-                            class="form-label fw-semibold"
-                        >
-                            Kondisi Barang
-                        </label>
-
-                        <select
-                            name="kondisi_barang"
-                            id="kondisi_barang"
-                            class="form-select"
-                        >
-                            <option
-                                value="Baik"
-                                {{ old('kondisi_barang', 'Baik') == 'Baik' ? 'selected' : '' }}
-                            >
-                                Baik
-                            </option>
-
-                            <option
-                                value="Rusak Ringan"
-                                {{ old('kondisi_barang') == 'Rusak Ringan' ? 'selected' : '' }}
-                            >
-                                Rusak Ringan
-                            </option>
-
-                            <option
-                                value="Rusak Berat"
-                                {{ old('kondisi_barang') == 'Rusak Berat' ? 'selected' : '' }}
-                            >
-                                Rusak Berat
-                            </option>
-
-                            <option
-                                value="Hilang"
-                                {{ old('kondisi_barang') == 'Hilang' ? 'selected' : '' }}
-                            >
-                                Hilang
-                            </option>
+                        <label for="kondisi_barang" class="form-label fw-semibold">Kondisi Barang</label>
+                        <select name="kondisi_barang" id="kondisi_barang" class="form-select">
+                            <option value="Baik" {{ old('kondisi_barang', 'Baik') == 'Baik' ? 'selected' : '' }}>Baik</option>
+                            <option value="Rusak Ringan" {{ old('kondisi_barang') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
+                            <option value="Rusak Berat" {{ old('kondisi_barang') == 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
+                            <option value="Hilang" {{ old('kondisi_barang') == 'Hilang' ? 'selected' : '' }}>Hilang</option>
                         </select>
                     </div>
 
                     <!-- Catatan -->
                     <div class="col-12">
-                        <label
-                            for="catatan"
-                            class="form-label fw-semibold"
-                        >
-                            Catatan
-                        </label>
-
-                        <textarea
-                            name="catatan"
-                            id="catatan"
-                            rows="3"
-                            class="form-control"
-                            placeholder="Tambahkan catatan jika diperlukan..."
-                        >{{ old('catatan') }}</textarea>
+                        <label for="catatan" class="form-label fw-semibold">Catatan</label>
+                        <textarea name="catatan" id="catatan" rows="3" class="form-control" placeholder="Tambahkan catatan jika diperlukan...">{{ old('catatan') }}</textarea>
                     </div>
 
                     <!-- Tombol Aksi -->
                     <div class="col-12 d-flex justify-content-end gap-2 mt-4 pt-3 border-top action-buttons">
-
-                        <a
-                            href="{{ route('pengembalian.index') }}"
-                            class="btn btn-cancel px-4 py-2"
-                        >
-                            <i class="bi bi-x-circle me-1"></i>
-                            Batal
+                        <a href="{{ route('pengembalian.index') }}" class="btn btn-cancel px-4 py-2">
+                            <i class="bi bi-x-circle me-1"></i> Batal
                         </a>
-
-                        <button
-                            type="submit"
-                            class="btn btn-brand px-4 py-2"
-                        >
-                            <i class="bi bi-check-circle-fill me-1"></i>
-                            Simpan Pengembalian
+                        <button type="submit" class="btn btn-brand px-4 py-2">
+                            <i class="bi bi-check-circle-fill me-1"></i> Simpan Pengembalian
                         </button>
-
                     </div>
 
                 </div>
-
             </form>
-
         </div>
     </div>
-
 </div>
 
 @endsection

@@ -467,19 +467,30 @@
     <div class="card card-brand shadow-sm overflow-hidden mb-4">
 
         {{-- Header Card --}}
-        <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex align-items-center justify-content-between">
+<div class="card-header bg-transparent border-bottom py-3 px-4 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-list-check text-primary fs-5"></i>
+        <h6 class="fw-bold mb-0 text-body">
+            Data Peminjaman Aktif
+        </h6>
+    </div>
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 px-3 py-1.5 rounded-pill small fw-semibold" title="Total denda dari seluruh data database">
+            Total Denda (Semua): Rp {{ number_format($totalDendaSemua, 0, ',', '.') }}
+        </span>
+        <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 px-3 py-1.5 rounded-pill small fw-semibold" title="Total denda khusus halaman aktif">
+            Denda per paginate: Rp {{ number_format($totalDendaHalamanIni, 0, ',', '.') }}
+        </span>
+        <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
+            Tampil: {{ count($datap) }} Data
+        </span>
+        <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
+            Total Semua: {{ $totalSemuaData }} Data
+        </span>
+    </div>
 
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-list-check text-primary fs-5"></i>
-                <h6 class="fw-bold mb-0 text-body">
-                    Data Peminjaman Aktif
-                </h6>
-            </div>
-
-            <span class="badge bg-body-tertiary text-body-secondary border px-3 py-1.5 rounded-pill small fw-normal">
-                Total: {{ count($datap) }} Data
-            </span>
-
+</div>
+</div>
         </div>
 
         <div class="card-body p-0">

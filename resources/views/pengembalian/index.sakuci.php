@@ -189,8 +189,16 @@
                                     <span class="badge badge-name fw-bold px-2.5 py-1.5 rounded-2 fs-8">
                                         <i class="bi bi-person me-1"></i>
                                         @php
+                                            // Mengambil relasi bertingkat pengembalian -> peminjaman -> user
                                             $user = $pengembalian->peminjaman->user ?? null;
-                                            $namaPeminjam = $user->username ?? $user->nama ?? $user->name ?? ('Peminjam #' . $pengembalian->id_peminjaman);
+                                            
+                                            // Mencari nama user berdasarkan kolom yang tersedia di database
+                                            $namaPeminjam = $user->name ?? $user->nama ?? $user->username ?? null;
+                                            
+                                            // Jika tetap tidak ditemukan, tampilkan ID peminjaman
+                                            if (!$namaPeminjam) {
+                                                $namaPeminjam = 'Peminjaman #' . ($pengembalian->id_peminjaman ?? '-');
+                                            }
                                         @endphp
                                         {{ $namaPeminjam }}
                                     </span>
